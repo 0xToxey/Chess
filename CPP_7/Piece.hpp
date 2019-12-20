@@ -14,13 +14,13 @@ enum class PieceType{
 class Piece
 {
 public:
-	Piece(const PieceType type, const std::string currentPosition);  // C'TOR
+	Piece(const PieceType& type, const std::string& currentPosition);  // C'TOR
 
 	// GETTERS
 	PieceType getType() const;
 	std::string getCurrentPosition() const;
 
-	virtual void move() = 0;
+	virtual void move(const std::string& placeToMove) = 0;
 
 protected:
 	PieceType _type;
