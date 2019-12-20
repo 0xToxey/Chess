@@ -6,7 +6,7 @@ using namespace ChessPieces;
 
 Player::Player(const bool white) :
 	_white(white),
-	_pieces()
+	_pieces{nullptr}
 {
 	switch (this->_white)
 	{
