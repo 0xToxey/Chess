@@ -8,7 +8,7 @@ in order to read and write information from and to the Backend
 #include <iostream>
 #include <thread>
 
-#include "Board.hpp"
+#include "Game.hpp"
 
 using std::cout;
 using std::endl;
@@ -49,7 +49,7 @@ void main()
 	// YOUR CODE
 
 	strcpy_s(msgToGraphics, "r######r################################################R######R1"); // just example...
-	Board board("r######r################################################R######R");
+	Game game("r######r################################################R######R");
 	p.sendMessageToGraphics(msgToGraphics);   // send the board string
 
 	// get message from graphics
@@ -60,15 +60,8 @@ void main()
 		// should handle the string the sent from graphics
 		// according the protocol. Ex: e2e4           (move e2 to e4)
 		
-		// YOUR CODE
-		strcpy_s(msgToGraphics, "YOUR CODE"); // msgToGraphics should contain the result of the operation
-
-		/******* JUST FOR EREZ DEBUGGING ******/
-		int r = rand() % 10; // just for debugging......
-		msgToGraphics[0] = (char)(1 + '0');
-		msgToGraphics[1] = 0;
-		/******* JUST FOR EREZ DEBUGGING ******/
-
+		strcpy_s(msgToGraphics, std::to_string(game.move(msgFromGraphics)).c_str()); // msgToGraphics should contain the result of the operation
+		strcpy_s(msgToGraphics, "5");
 
 		// return result to graphics		
 		p.sendMessageToGraphics(msgToGraphics);   

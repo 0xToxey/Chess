@@ -6,7 +6,14 @@ namespace ChessPieces
 	class Rook : public Piece
 	{
 	public:
-		Rook(const PieceType& type, const std::string& currentPosition);
-		virtual void move(const std::string& placeToMove);
+		Rook(const PieceType& type, const std::string& currentPosition, const bool& white);
+		virtual void checkIfCapableMove(const std::string& placeToMove);
+	};
+
+	class Empty : public Piece
+	{
+	public:
+		Empty(const PieceType& type, const std::string& currentPosition, const bool& white);
+		virtual void checkIfCapableMove(const std::string& placeToMove);
 	};
 }

@@ -5,12 +5,12 @@
 class Player
 {
 public:
-	Player(const bool white);
+	Player(const bool& white);
 	~Player();
-	
+
 	bool isWhite() const;
+	Piece* _pieces[PIECES_PER_PLAYER];
 
 protected:
-	Piece* _pieces[PIECES_PER_PLAYER];
 	bool _white;  // whice means if he's starting and what side his pawns move
 };

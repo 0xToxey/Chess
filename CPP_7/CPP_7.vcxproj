@@ -127,7 +127,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Board.hpp" />
+    <ClInclude Include="Game.hpp" />
+    <ClInclude Include="MoveChecking.hpp" />
     <ClInclude Include="Piece.hpp" />
     <ClInclude Include="Pieces.hpp" />
     <ClInclude Include="Pipe.h" />
@@ -136,7 +137,8 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="MoveChecking.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Pieces.cpp" />
     <ClCompile Include="Player.cpp" />
