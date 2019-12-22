@@ -11,7 +11,7 @@ int MoveChecker::checkMove(
 	{
 		return CASE_2_INVALID;
 	}
-	else if (case3(board, positionToMoveTo, positionToMoveFrom) == CASE_3_INVALID)
+	else if (case3(board, positionToMoveFrom, positionToMoveTo) == CASE_3_INVALID)
 	{
 		return CASE_3_INVALID;
 	}

@@ -1,6 +1,4 @@
 #include "Utils.hpp"
-#include "Piece.hpp"
-#include "Player.hpp"
 
 Piece* getPieceByPosition(const Player(&players)[NUM_OF_PLAYERS], const std::string& position)
 {
@@ -23,7 +21,7 @@ Piece* getPieceByPosition(const Player(&players)[NUM_OF_PLAYERS], const std::str
 
 std::tuple<int, int> positionStringToInt(const std::string& position)
 {
-	return std::make_tuple(position[0] - ASCII_LETTER_CONVERT - 1, position[1] - ASCII_NUMBER_CONVERT - 1);
+	return std::make_tuple(position[1] - ASCII_NUMBER_CONVERT - 1, position[0] - ASCII_LETTER_CONVERT - 1);
 }
 
 PieceColor getColorOfPieceByPosition(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& position)

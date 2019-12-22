@@ -1,5 +1,9 @@
 #pragma once
+#include "Piece.hpp"
+#include "Player.hpp"
+#include <iostream>
 #include <tuple>
+
 #define NUM_OF_PLAYERS 2
 #define NUM_OF_TILES 8
 
