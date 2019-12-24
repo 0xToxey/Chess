@@ -1,23 +1,23 @@
 #include "Utils.hpp"
 
-Piece* getPieceByPosition(const Player(&players)[NUM_OF_PLAYERS], const std::string& position)
-{
-
-	for (auto const& player : players)
-	{
-		for (auto const& piece : player._pieces)
-		{
-			if (piece == nullptr)
-			{
-				break;
-			}
-			else if (piece->getCurrentPosition() == position)
-			{
-				return piece;
-			}
-		}
-	}
-}
+//Piece* getPieceByPosition(const Player(&players)[NUM_OF_PLAYERS], const std::string& position)
+//{
+//
+//	for (auto const& player : players)
+//	{
+//		for (auto const& piece : player._pieces)
+//		{
+//			if (piece == nullptr)
+//			{
+//				break;
+//			}
+//			else if (piece->getCurrentPosition() == position)
+//			{
+//				return piece;
+//			}
+//		}
+//	}
+//}
 
 std::tuple<int, int> positionStringToInt(const std::string& position)
 {
@@ -39,5 +39,16 @@ PieceColor getColorOfPieceByPosition(const char(&board)[NUM_OF_TILES][NUM_OF_TIL
 	else
 	{
 		return PieceColor::empty;
+	}
+}
+
+unsigned int checkPlayerTurn(const Player(&players)[NUM_OF_PLAYERS])
+{
+	for (unsigned int i = 0; i < NUM_OF_PLAYERS; i++)
+	{
+		if (players[i].isPlayerTurn())
+		{
+			return i;
+		}
 	}
 }

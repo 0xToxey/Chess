@@ -20,6 +20,7 @@ enum class PieceColor
 };
 
 
-Piece* getPieceByPosition(const Player(&players)[NUM_OF_PLAYERS], const std::string& position);
+//Piece* getPieceByPosition(const Player(&players)[NUM_OF_PLAYERS], const std::string& position);
 std::tuple<int, int> positionStringToInt(const std::string& position);
 PieceColor getColorOfPieceByPosition(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& position);
+unsigned int checkPlayerTurn(const Player(&players)[NUM_OF_PLAYERS]);

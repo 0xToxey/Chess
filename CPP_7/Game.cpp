@@ -15,6 +15,7 @@ Game::Game(const std::string& startingBoard) :
 			count--;
 		}
 	}
+
 	//strcpy((char*)this->_board, startingBoard.c_str());
 }
 
@@ -30,11 +31,21 @@ int Game::move(const std::string& msgFromGraphics)
 	{
 		if (result == VALID_CHECK)
 		{
-			this->_board[std::get<0>(positionStringToInt(positionToMoveTo))][std::get<1>(positionStringToInt(positionToMoveTo))] =
-				this->_board[std::get<0>(positionStringToInt(positionToMoveFrom))][std::get<1>(positionStringToInt(positionToMoveFrom))];
+			// changing the pieces on the actual board
+			int positionToMoveTo0, positionToMoveTo1, positionToMoveFrom0, positionToMoveFrom1;
+			std::tie(positionToMoveTo0, positionToMoveTo1) = positionStringToInt(positionToMoveTo);
+			std::tie(positionToMoveFrom0, positionToMoveFrom1) = positionStringToInt(positionToMoveFrom);
 
-			this->_board[std::get<0>(positionStringToInt(positionToMoveFrom))][std::get<1>(positionStringToInt(positionToMoveFrom))] = EMPTY_TILE;
+			this->_board[positionToMoveTo0][positionToMoveTo1] = 
+				this->_board[positionToMoveFrom0][positionToMoveFrom1];
 
+			this->_board[positionToMoveFrom0][positionToMoveFrom1] = EMPTY_TILE;
+
+
+			// changing the players turn
+			unsigned int IndexOfPlayerTurn = checkPlayerTurn(this->_players);
+			this->_players[IndexOfPlayerTurn].setTurn(false);
+			this->_players[(IndexOfPlayerTurn == 1) ? 0 : 1].setTurn(true);
 		}
 	}
 	return result;
