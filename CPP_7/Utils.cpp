@@ -7,7 +7,7 @@ std::tuple<int, int> positionStringToInt(const std::string& position)
 	return std::make_tuple(position[1] - ASCII_NUMBER_CONVERT - 1, position[0] - ASCII_LETTER_CONVERT - 1);
 }
 
-PieceColor getColorOfPieceByPosition(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& position)
+PieceColor getColorOfPieceByPosition(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& position)
 {
 	int position0, position1;
 	std::tie(position0, position1) = positionStringToInt(position);
@@ -36,7 +36,7 @@ unsigned int checkPlayerTurn(const Player(&players)[NUM_OF_PLAYERS])
 	}
 }
 
-PieceType getTypeOfPieceByPostion(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& position)
+PieceType getTypeOfPieceByPostion(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& position)
 {
 	int position0, position1;
 	std::tie(position0, position1) = positionStringToInt(position);

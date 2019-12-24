@@ -6,10 +6,16 @@ namespace ChessPieces
 	class Rook : public Piece
 	{
 	public:
+		// C'TOR
 		Rook(const PieceType& type, const std::string& currentPosition, const bool& white);
-		virtual bool checkIfCapableMove(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveTo);
+
+		virtual bool isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveTo);
+	
 	protected:
-		virtual bool isMovingAcrossPieces(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const unsigned int& rowToMoveFrom, const unsigned int& columnToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& columnToMoveTo);
+		virtual bool isMovingAcrossPieces(
+			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const unsigned int& rowToMoveFrom, const unsigned int& columnToMoveFrom,
+			const unsigned int& rowToMoveTo, const unsigned int& columnToMoveTo);
 
 	};
 

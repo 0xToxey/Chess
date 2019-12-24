@@ -8,10 +8,10 @@ MoveChecker::MoveChecker() :
 };
 
 int MoveChecker::checkMove(
+	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 	const Player (&players)[NUM_OF_PLAYERS],
 	const std::string& positionToMoveFrom,
-	const std::string& positionToMoveTo,
-	const char (&board)[NUM_OF_TILES][NUM_OF_TILES])
+	const std::string& positionToMoveTo)
 {
 	unsigned int IndexOfPlayerTurn = checkPlayerTurn(players);
 	
@@ -36,7 +36,7 @@ int MoveChecker::checkMove(
 	return VALID_CHECK;
 }
 
-int MoveChecker::case2(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const bool& isWhite)
+int MoveChecker::case2(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveFrom, const bool& isWhite)
 {
 	if (getColorOfPieceByPosition(board, positionToMoveFrom) == PieceColor::empty)
 	{
@@ -52,7 +52,7 @@ int MoveChecker::case2(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std
 	}
 }
 
-int MoveChecker::case3(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const std::string& positionToMoveTo)
+int MoveChecker::case3(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveFrom, const std::string& positionToMoveTo)
 {
 	if (getColorOfPieceByPosition(board, positionToMoveFrom) == getColorOfPieceByPosition(board, positionToMoveTo))
 	{
@@ -61,7 +61,7 @@ int MoveChecker::case3(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std
 	return VALID_CHECK;
 }
 
-int MoveChecker::case6(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const std::string& positionToMoveTo)
+int MoveChecker::case6(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveFrom, const std::string& positionToMoveTo)
 {
 	PieceType currentPieceType = getTypeOfPieceByPostion(board, positionToMoveFrom);
 	bool capableOfMoving = true;
@@ -75,7 +75,7 @@ int MoveChecker::case6(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std
 			break;
 		case PieceType::rook:
 			this->_rook.setCurrentPosition(positionToMoveFrom);
-			capableOfMoving = this->_rook.checkIfCapableMove(board, positionToMoveTo);
+			capableOfMoving = this->_rook.isCapableOfMoving(board, positionToMoveTo);
 			break;
 		case PieceType::knight:
 			break;

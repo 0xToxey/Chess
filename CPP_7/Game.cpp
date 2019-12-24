@@ -2,53 +2,48 @@
 #include "Utils.hpp"
 #include <tuple>
 
+// C'TOR
 Game::Game(const std::string& startingBoard) :
 	_players{ Player(true), Player(false) },
 	_board{ NULL },
 	_moveChecker()
-
 {
-	int count = startingBoard.length() - 1;
-	for (int i = 0; i < NUM_OF_TILES; i++)
-	{
-		for (int j = 0; j < NUM_OF_TILES; j++)
-		{
-			this->_board[i][j] = startingBoard[count];
-			count--;
-		}
-	}
+	std::string arrayBoard = startingBoard;
+	std::reverse(arrayBoard.begin(), arrayBoard.end());
 
-	//strcpy((char*)this->_board, startingBoard.c_str());
+	strcpy((char*)this->_board, arrayBoard.c_str());
 }
 
-Game::~Game()
-{
-}
-
+/*
+function calls function to check if move is capbale, if is capabel - doing the move
+input:
+	msgFromGraphics - message containing where player is , and where to move
+output:
+	MoveErrorCode - a code accourding to the pptx
+*/
 int Game::move(const std::string& msgFromGraphics)
 {
+	// unpacking msg from graphics from 'e2f4' format to 'e2', 'f4'
 	std::string positionToMoveFrom = msgFromGraphics.substr(0, 2);
 	std::string positionToMoveTo = msgFromGraphics.substr(2, 4);
-	int result = this->_moveChecker.checkMove(this->_players, positionToMoveFrom, positionToMoveTo, this->_board);
+
+	int moveErrorCode = this->_moveChecker.checkMove(this->_board, this->_players, positionToMoveFrom, positionToMoveTo);
+	if (moveErrorCode != VALID_CHECK)
 	{
-		if (result == VALID_CHECK)
-		{
-			// changing the pieces on the actual board
-			int positionToMoveTo0, positionToMoveTo1, positionToMoveFrom0, positionToMoveFrom1;
-			std::tie(positionToMoveTo0, positionToMoveTo1) = positionStringToInt(positionToMoveTo);
-			std::tie(positionToMoveFrom0, positionToMoveFrom1) = positionStringToInt(positionToMoveFrom);
-
-			this->_board[positionToMoveTo0][positionToMoveTo1] = 
-				this->_board[positionToMoveFrom0][positionToMoveFrom1];
-
-			this->_board[positionToMoveFrom0][positionToMoveFrom1] = EMPTY_TILE;
-
-
-			// changing the players turn
-			unsigned int IndexOfPlayerTurn = checkPlayerTurn(this->_players);
-			this->_players[IndexOfPlayerTurn].setTurn(false);
-			this->_players[(IndexOfPlayerTurn == 1) ? 0 : 1].setTurn(true);
-		}
+		return moveErrorCode;
 	}
-	return result;
+
+	// changing the pieces on the actual board
+	int rowToMoveFrom, colToMoveFrom, rowToMoveTo, colToMoveTo;
+	std::tie(rowToMoveTo, colToMoveTo) = positionStringToInt(positionToMoveTo);
+	std::tie(rowToMoveFrom, colToMoveFrom) = positionStringToInt(positionToMoveFrom);
+
+	this->_board[rowToMoveTo][colToMoveTo] = this->_board[rowToMoveFrom][colToMoveFrom];
+	this->_board[rowToMoveFrom][colToMoveFrom] = EMPTY_TILE;
+
+	// changing the players turn
+	unsigned int IndexOfPlayerTurn = checkPlayerTurn(this->_players);
+	this->_players[IndexOfPlayerTurn].setTurn(false);
+	this->_players[(IndexOfPlayerTurn == 1) ? 0 : 1].setTurn(true);
+	return VALID_CHECK;
 }

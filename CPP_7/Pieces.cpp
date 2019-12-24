@@ -7,7 +7,7 @@ ChessPieces::Rook::Rook(const PieceType& type, const std::string& currentPositio
 {
 };
 
-bool ChessPieces::Rook::checkIfCapableMove(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveTo)
+bool ChessPieces::Rook::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveTo)
 {
 	unsigned int rowToMoveFrom, colToMoveFrom, rowToMoveTo, colToMoveTo;
 
@@ -28,7 +28,7 @@ bool ChessPieces::Rook::checkIfCapableMove(const char(&board)[NUM_OF_TILES][NUM_
 	return true;
 }
 
-bool ChessPieces::Rook::isMovingAcrossPieces(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const unsigned int& rowToMoveFrom, const unsigned int& columnToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& columnToMoveTo)
+bool ChessPieces::Rook::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const unsigned int& rowToMoveFrom, const unsigned int& columnToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& columnToMoveTo)
 {
 	if (rowToMoveFrom == rowToMoveTo)
 	{

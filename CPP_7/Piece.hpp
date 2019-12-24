@@ -5,18 +5,24 @@
 class Piece
 {
 public:
-	Piece(const PieceType& type, const std::string& currentPosition, const bool& white);  // C'TOR
+	// C'TOR
+	Piece(const PieceType& type, const std::string& currentPosition, const bool& white);
 
 	// GETTERS
 	PieceType getType() const;
 	std::string getCurrentPosition() const;
 	bool isWhite() const;
 
-	virtual bool checkIfCapableMove(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveTo) = 0;
+	// SETTRES
 	void setCurrentPosition(const std::string& positionToMoveFrom);
 
+	virtual bool checkIfCapableMove(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveTo) = 0;
+
 protected:
-	virtual bool isMovingAcrossPieces(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const unsigned int& rowToMoveFrom, const unsigned int& columnToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& columnToMoveTo) = 0;
+	virtual bool isMovingAcrossPieces(
+		const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+		const unsigned int& rowToMoveFrom, const unsigned int& columnToMoveFrom,
+		const unsigned int& rowToMoveTo, const unsigned int& columnToMoveTo) = 0;
 	
 	PieceType _type;
 	std::string _currentPosition;

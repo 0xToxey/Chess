@@ -3,17 +3,6 @@
 #include "Pieces.hpp"
 #include <string>
 
-#define NUM_OF_PLAYERS 2
-#define VALID_CHECK 0
-#define CASE_2_INVALID 2
-#define CASE_3_INVALID 3
-#define CASE_6_INVALID 6
-#define CASE_7_INVALID 7
-
-
-#define NUM_OF_PLAYERS 2
-#define NUM_OF_TILES 8
-
 /*
 0 – מהלך תקין
 1 – מהלך תקין, התבצעה תזוזה שגרמה שח על היריב
@@ -31,17 +20,17 @@ public:
 	MoveChecker();
 
 	int checkMove(
+		const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 		const Player(&players)[NUM_OF_PLAYERS],
 		const std::string& positionToMoveFrom,
-		const std::string& positionToMoveTo,
-		const char(&board)[NUM_OF_TILES][NUM_OF_TILES]);
+		const std::string& positionToMoveTo);
 private:
 
 	ChessPieces::Rook _rook;
 
-	int case2(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const bool& isWhite);
-	int case3(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
-	int case6(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
+	int case2(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveFrom, const bool& isWhite);
+	int case3(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
+	int case6(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
 	int case7(const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
 
 };
