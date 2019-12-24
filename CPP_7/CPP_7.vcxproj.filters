@@ -39,6 +39,9 @@
     <ClInclude Include="Utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="constants.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="MoveChecking.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

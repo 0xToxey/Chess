@@ -1,4 +1,6 @@
 #include "MoveChecking.hpp"
+#include "constants.hpp"
+#include "Utils.hpp"
 
 MoveChecker::MoveChecker() :
 	_rook(PieceType::rook, "00", false)
@@ -62,7 +64,7 @@ int MoveChecker::case3(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std
 int MoveChecker::case6(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const std::string& positionToMoveTo)
 {
 	PieceType currentPieceType = getTypeOfPieceByPostion(board, positionToMoveFrom);
-	bool capableOfMoving;
+	bool capableOfMoving = true;
 	switch (currentPieceType)
 	{
 		case PieceType::king:
@@ -73,7 +75,7 @@ int MoveChecker::case6(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std
 			break;
 		case PieceType::rook:
 			this->_rook.setCurrentPosition(positionToMoveFrom);
-			capableOfMoving = this->_rook.checkIfCapableMove(positionToMoveTo);
+			capableOfMoving = this->_rook.checkIfCapableMove(board, positionToMoveTo);
 			break;
 		case PieceType::knight:
 			break;

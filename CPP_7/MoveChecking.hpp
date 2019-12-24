@@ -1,7 +1,7 @@
 #pragma once
 #include "Player.hpp"
 #include "Pieces.hpp"
-#include "Utils.hpp"
+#include <string>
 
 #define NUM_OF_PLAYERS 2
 #define VALID_CHECK 0
@@ -36,7 +36,7 @@ public:
 		const std::string& positionToMoveTo,
 		const char(&board)[NUM_OF_TILES][NUM_OF_TILES]);
 private:
-	
+
 	ChessPieces::Rook _rook;
 
 	int case2(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const bool& isWhite);

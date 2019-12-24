@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="constants.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="MoveChecking.hpp" />
     <ClInclude Include="Piece.hpp" />

@@ -1,23 +1,6 @@
 #include "Utils.hpp"
-
-//Piece* getPieceByPosition(const Player(&players)[NUM_OF_PLAYERS], const std::string& position)
-//{
-//
-//	for (auto const& player : players)
-//	{
-//		for (auto const& piece : player._pieces)
-//		{
-//			if (piece == nullptr)
-//			{
-//				break;
-//			}
-//			else if (piece->getCurrentPosition() == position)
-//			{
-//				return piece;
-//			}
-//		}
-//	}
-//}
+#include <tuple>
+#include <cctype>
 
 std::tuple<int, int> positionStringToInt(const std::string& position)
 {

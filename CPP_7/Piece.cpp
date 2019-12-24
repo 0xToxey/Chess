@@ -1,5 +1,4 @@
 #include "Piece.hpp"
-#include <string>
 
 Piece::Piece(const PieceType& type, const std::string& currentPosition, const bool& white) :
 	_type(type),

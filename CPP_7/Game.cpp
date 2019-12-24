@@ -1,4 +1,6 @@
 #include "Game.hpp"
+#include "Utils.hpp"
+#include <tuple>
 
 Game::Game(const std::string& startingBoard) :
 	_players{ Player(true), Player(false) },
