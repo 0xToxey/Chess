@@ -1,10 +1,12 @@
 #pragma once
 #include "Player.hpp"
+#include "Utils.hpp"
 
 #define NUM_OF_PLAYERS 2
 #define VALID_CHECK 0
 #define CASE_2_INVALID 2
 #define CASE_3_INVALID 3
+#define CASE_6_INVALID 6
 
 
 #define NUM_OF_PLAYERS 2
@@ -20,6 +22,7 @@
 6 – מהלך לא תקין, תזוזה לא חוקית של כלי7 – מהלך לא תקין, משבצת המקור ומשבצת היעד זהות
 8 – מהלך תקין, התבצע שחמט!
 */
+
 class MoveChecker
 {
 public:
@@ -29,8 +32,9 @@ public:
 		const std::string& positionToMoveTo,
 		const char(&board)[NUM_OF_TILES][NUM_OF_TILES]);
 private:
-	Piece* getPieceByPosition(const Player(&players)[NUM_OF_PLAYERS], const std::string& position);
 
-	int case3(const Piece* piece1, const Piece* piece2);
-	int case2(const char(&board)[NUM_OF_TILES][NUM_OF_TILES],const std::string& positionToMoveFrom);
+	int case3(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
+	int case2(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom);
+	int case6(const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
+
 };
