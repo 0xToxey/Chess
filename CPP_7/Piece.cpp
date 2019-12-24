@@ -18,6 +18,11 @@ std::string Piece::getCurrentPosition() const
 	return this->_currentPosition;
 }
 
+void Piece::setCurrentPosition(const std::string& positionToMoveFrom)
+{
+	this->_currentPosition = positionToMoveFrom;
+}
+
 bool Piece::isWhite() const
 {
 	return this->_white;

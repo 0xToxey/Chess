@@ -22,7 +22,9 @@ public:
 	std::string getCurrentPosition() const;
 	bool isWhite() const;
 
-	virtual void checkIfCapableMove(const std::string& placeToMove) = 0;
+	virtual bool checkIfCapableMove(const std::string& positionToMoveTo) = 0;
+
+	void setCurrentPosition(const std::string& positionToMoveFrom);
 
 protected:
 	PieceType _type;

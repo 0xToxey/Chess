@@ -7,13 +7,7 @@ namespace ChessPieces
 	{
 	public:
 		Rook(const PieceType& type, const std::string& currentPosition, const bool& white);
-		virtual void checkIfCapableMove(const std::string& placeToMove);
+		virtual bool checkIfCapableMove(const std::string& positionToMoveTo);
 	};
 
-	class Empty : public Piece
-	{
-	public:
-		Empty(const PieceType& type, const std::string& currentPosition, const bool& white);
-		virtual void checkIfCapableMove(const std::string& placeToMove);
-	};
 }

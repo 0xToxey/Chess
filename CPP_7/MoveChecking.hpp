@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.hpp"
+#include "Pieces.hpp"
 #include "Utils.hpp"
 
 #define NUM_OF_PLAYERS 2
@@ -7,6 +8,7 @@
 #define CASE_2_INVALID 2
 #define CASE_3_INVALID 3
 #define CASE_6_INVALID 6
+#define CASE_7_INVALID 7
 
 
 #define NUM_OF_PLAYERS 2
@@ -26,15 +28,20 @@ V - 3 – מהלך לא תקין, במשבצת היעד קיים כלי של השחקן הנוכחי
 class MoveChecker
 {
 public:
+	MoveChecker();
+
 	int checkMove(
 		const Player(&players)[NUM_OF_PLAYERS],
 		const std::string& positionToMoveFrom,
 		const std::string& positionToMoveTo,
 		const char(&board)[NUM_OF_TILES][NUM_OF_TILES]);
 private:
+	
+	ChessPieces::Rook _rook;
 
-	int case3(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
 	int case2(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const bool& isWhite);
-	int case6(const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
+	int case3(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
+	int case6(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
+	int case7(const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
 
 };
