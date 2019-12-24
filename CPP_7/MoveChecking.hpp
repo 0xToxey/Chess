@@ -6,6 +6,7 @@
 #define VALID_CHECK 0
 #define CASE_2_INVALID 2
 #define CASE_3_INVALID 3
+#define CASE_6_INVALID 6
 
 
 #define NUM_OF_PLAYERS 2
@@ -34,4 +35,6 @@ private:
 
 	int case3(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
 	int case2(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std::string& positionToMoveFrom);
+	int case6(const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
+
 };

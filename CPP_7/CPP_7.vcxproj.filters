@@ -36,10 +36,10 @@
     <ClInclude Include="Game.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MoveChecking.hpp">
+    <ClInclude Include="Utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utils.hpp">
+    <ClInclude Include="MoveChecking.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

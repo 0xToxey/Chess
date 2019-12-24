@@ -15,7 +15,10 @@ int MoveChecker::checkMove(
 	{
 		return CASE_3_INVALID;
 	}
-
+	else if (case6(positionToMoveFrom, positionToMoveTo) == CASE_6_INVALID)
+	{
+		return CASE_6_INVALID;
+	}
 	return VALID_CHECK;
 }
 
@@ -33,6 +36,15 @@ int MoveChecker::case3(const char(&board)[NUM_OF_TILES][NUM_OF_TILES], const std
 	if (getColorOfPieceByPosition(board, positionToMoveFrom) == getColorOfPieceByPosition(board, positionToMoveTo))
 	{
 		return CASE_3_INVALID;
+	}
+	return VALID_CHECK;
+}
+
+int MoveChecker::case6(const std::string& positionToMoveFrom, const std::string& positionToMoveTo)
+{
+	if (positionToMoveFrom == positionToMoveTo)
+	{
+		return CASE_6_INVALID;
 	}
 	return VALID_CHECK;
 }
