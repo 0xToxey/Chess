@@ -3,7 +3,8 @@
 #include "Utils.hpp"
 
 MoveChecker::MoveChecker() :
-	_rook(PieceType::rook, "00", false)
+	_rook(PieceType::rook, "00", false),
+	_king(PieceType::king, "00", false )
 {
 };
 
@@ -69,18 +70,26 @@ int MoveChecker::case6(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const
 	{
 		case PieceType::king:
 			break;
+
 		case PieceType::queen:
 			break;
+
 		case PieceType::pawn:
 			break;
+
 		case PieceType::rook:
 			this->_rook.setCurrentPosition(positionToMoveFrom);
 			capableOfMoving = this->_rook.isCapableOfMoving(board, positionToMoveTo);
 			break;
+
 		case PieceType::knight:
+			this->_king.setCurrentPosition(positionToMoveFrom);
+			capableOfMoving = this->_king.isCapableOfMoving(board, positionToMoveTo);
 			break;
+
 		case PieceType::bishop:
 			break;
+
 		case PieceType::empty:
 			break;
 	}

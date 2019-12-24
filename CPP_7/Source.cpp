@@ -48,8 +48,8 @@ void main()
 	// msgToGraphics should contain the board string accord the protocol
 	// YOUR CODE
 
-	strcpy_s(msgToGraphics, "r######r################################################R######R1"); // just example...
-	Game game("r######r################################################R######R");
+	strcpy_s(msgToGraphics, "r##K###r################################################R###k##R0"); // just example...
+	Game game("r##K###r################################################R###k##R");
 	p.sendMessageToGraphics(msgToGraphics);   // send the board string
 
 	// get message from graphics

@@ -8,6 +8,7 @@ Game::Game(const std::string& startingBoard) :
 	_board{ NULL },
 	_moveChecker()
 {
+	//copy the game board into the board array.
 	std::string arrayBoard = startingBoard;
 	std::reverse(arrayBoard.begin(), arrayBoard.end());
 

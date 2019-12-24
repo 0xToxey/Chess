@@ -16,7 +16,7 @@ public:
 	// SETTRES
 	void setCurrentPosition(const std::string& positionToMoveFrom);
 
-	virtual bool checkIfCapableMove(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveTo) = 0;
+	virtual bool isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveTo) = 0;
 
 protected:
 	virtual bool isMovingAcrossPieces(
