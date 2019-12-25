@@ -69,6 +69,8 @@ int MoveChecker::case6(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const
 	switch (currentPieceType)
 	{
 		case PieceType::king:
+			this->_king.setCurrentPosition(positionToMoveFrom);
+			capableOfMoving = this->_king.isCapableOfMoving(board, positionToMoveTo);
 			break;
 
 		case PieceType::queen:
@@ -83,8 +85,6 @@ int MoveChecker::case6(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const
 			break;
 
 		case PieceType::knight:
-			this->_king.setCurrentPosition(positionToMoveFrom);
-			capableOfMoving = this->_king.isCapableOfMoving(board, positionToMoveTo);
 			break;
 
 		case PieceType::bishop:

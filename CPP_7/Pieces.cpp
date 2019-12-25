@@ -34,8 +34,9 @@ bool ChessPieces::Rook::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][
 	{
 		const unsigned int distance = std::abs((int)(columnToMoveFrom - columnToMoveTo));
 		const unsigned int startingColumn = ((columnToMoveFrom < columnToMoveTo) ? columnToMoveFrom : columnToMoveTo) + 1;
+		const unsigned int endingColumn = ((columnToMoveFrom > columnToMoveTo) ? columnToMoveFrom : columnToMoveTo);
 
-		for (unsigned int i = startingColumn; i < distance; i++)
+		for (unsigned int i = startingColumn; i < endingColumn; i++)
 		{
 			if (board[rowToMoveFrom][i] != EMPTY_TILE)
 			{
@@ -47,8 +48,9 @@ bool ChessPieces::Rook::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][
 	{
 		const unsigned int distance = std::abs((int)(rowToMoveFrom - rowToMoveTo));
 		const unsigned int startingRow = ((rowToMoveFrom < rowToMoveTo) ? rowToMoveFrom : rowToMoveTo) + 1;
+		const unsigned int endingRow = ((rowToMoveFrom > rowToMoveTo) ? rowToMoveFrom : rowToMoveTo);
 
-		for (unsigned int i = startingRow; i < distance; i++)
+		for (unsigned int i = startingRow; i < endingRow; i++)
 		{
 			if (board[i][columnToMoveFrom] != EMPTY_TILE)
 			{
@@ -70,12 +72,12 @@ bool ChessPieces::King::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TIL
 	// Move variables
 	unsigned int rowToMoveFrom, colToMoveFrom, rowToMoveTo, colToMoveTo;
 
-	std::tie(rowToMoveFrom, colToMoveFrom) = positionStringToInt(this->getCurrentPosition());
+	std::tie(rowToMoveFrom, colToMoveFrom) = positionStringToInt(this->_currentPosition);
 	std::tie(rowToMoveTo, colToMoveTo) = positionStringToInt(positionToMoveTo);\
 	
 	// King can move only 1 tile.
 	const unsigned int colDistance = std::abs((int)(colToMoveFrom - colToMoveTo));
-	const unsigned int rowDistance = std::abs((int)(rowToMoveFrom - rowToMoveFrom));
+	const unsigned int rowDistance = std::abs((int)(rowToMoveFrom - rowToMoveTo));
 
 	if (colDistance != 1 && rowDistance != 1)
 	{
@@ -87,5 +89,5 @@ bool ChessPieces::King::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TIL
 
 bool ChessPieces::King::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const unsigned int& rowToMoveFrom, const unsigned int& columnToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& columnToMoveTo)
 {
-	return true;
+	return false;
 }

@@ -3,16 +3,14 @@
 #include <tuple>
 
 // C'TOR
-Game::Game(const std::string& startingBoard) :
+Game::Game() :
 	_players{ Player(true), Player(false) },
 	_board{ NULL },
 	_moveChecker()
 {
 	//copy the game board into the board array.
-	std::string arrayBoard = startingBoard;
-	std::reverse(arrayBoard.begin(), arrayBoard.end());
-
-	strcpy((char*)this->_board, arrayBoard.c_str());
+	const char* arrayBoard = "R##K###R################################################r##k###r";
+	memcpy(this->_board, arrayBoard, TILES_PER_SIDE * TILES_PER_SIDE);
 }
 
 /*

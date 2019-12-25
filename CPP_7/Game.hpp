@@ -5,7 +5,7 @@ class Game
 {
 public:
 	// C'TOR
-	Game(const std::string& startingBoard);
+	Game();
 
 	int move(const std::string& msgFromGraphics);
 
