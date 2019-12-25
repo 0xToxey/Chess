@@ -18,13 +18,13 @@ MoveCode MoveManager::checkMove(
 	const unsigned int playerTurn = checkPlayerTurn(players);
 	const bool isWhite = players[playerTurn].isWhite();
 	const std::string otherPlayerKingPos = players[(playerTurn == 1) ? 0 : 1].getKingPosition();
-	const std::string currentPlayerKingPos = players[playerTurn].getKingPosition();
+	const std::string currPlayerKingPos = players[playerTurn].getKingPosition();
 	
 	if (isMovingOtherPlayerPieces(board, posToMoveFrom, players[playerTurn].isWhite()) == MoveCode::NotPlayerPiece)
 	{
 		return MoveCode::NotPlayerPiece;
 	}
-	if (IsEatingSelf(board, posToMoveFrom, posToMoveTo) == MoveCode::EatingSelf)
+	if (isEatingSelf(board, posToMoveFrom, posToMoveTo) == MoveCode::EatingSelf)
 	{
 		return MoveCode::EatingSelf;
 	}
@@ -36,8 +36,11 @@ MoveCode MoveManager::checkMove(
 	{
 		return MoveCode::NotCapableMove;
 	}
+	if (isSelfCheck(board, posToMoveFrom, posToMoveTo, currPlayerKingPos, isWhite) == MoveCode::SelfCheck)
+	{
+		return MoveCode::SelfCheck;
+	}
 
-	//if(isSelfCheck(board, posToMoveFrom, posToMoveTo, ))
 	// in case the move is possible checking for check
 	if(didMakeCheck(board, posToMoveFrom, posToMoveTo,otherPlayerKingPos, isWhite) == MoveCode::MadeCheck)
 	{
@@ -77,7 +80,7 @@ MoveCode MoveManager::isMovingOtherPlayerPieces(const char(&board)[TILES_PER_SID
 	}
 }
 
-MoveCode MoveManager::IsEatingSelf(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
+MoveCode MoveManager::isEatingSelf(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
 {
 	// checking if player is trying to take over his own pieces
 	if (getColorOfPieceByPosition(board, posToMoveFrom) == getColorOfPieceByPosition(board, posToMoveTo))
@@ -180,6 +183,16 @@ MoveCode MoveManager::didMakeCheckmate(const char (& board)[TILES_PER_SIDE][TILE
                                        const std::string& posToMoveFrom, const std::string& posToMoveTo,
 									   const std::string& kingPosition, const bool& isWhite)
 {
+	return MoveCode::ValidMove;
+}
+
+MoveCode MoveManager::isSelfCheck(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo, const std::string& kingPosition, const bool& isWhite)
+{
+	if (didMakeCheck(board, posToMoveFrom, posToMoveTo, kingPosition, !isWhite) == MoveCode::MadeCheck)
+	{
+		return MoveCode::SelfCheck;
+	}
+
 	return MoveCode::ValidMove;
 }
 
