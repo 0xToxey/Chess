@@ -4,19 +4,22 @@
 #define NUM_OF_PLAYERS 2
 #define TILES_PER_SIDE 8
 
-//MoveChecking class defines
-#define NUM_OF_PLAYERS 2
-#define VALID_CHECK 0
-#define CASE_2_INVALID 2
-#define CASE_3_INVALID 3
-#define CASE_6_INVALID 6
-#define CASE_7_INVALID 7
 
-// ?? defines
 #define ASCII_LETTER_CONVERT 96
 #define ASCII_NUMBER_CONVERT 48
 #define EMPTY_TILE '#'
 
+enum MoveCode
+{
+	ValidMove = 0,
+	MadeCheck = 1,
+	NotPlayerPiece = 2,
+	EatingSelf = 3,
+	SelfCheck = 4,
+	NotCapableMove = 6,
+	NotMoving = 7,
+	CheckMate = 8
+};
 
 enum class PieceType {
 	king,
@@ -25,5 +28,12 @@ enum class PieceType {
 	rook,
 	knight,
 	bishop,
+	empty
+};
+
+enum class PieceColor
+{
+	black,
+	white,
 	empty
 };

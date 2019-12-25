@@ -2,20 +2,21 @@
 #include <tuple>
 #include <cctype>
 
-std::tuple<int, int> positionStringToInt(const std::string& position)
+std::tuple<unsigned int, unsigned int> positionStringToInt(const std::string& position)
 {
+	// conversion from e2 to <1, 4>
 	return std::make_tuple(position[1] - ASCII_NUMBER_CONVERT - 1, position[0] - ASCII_LETTER_CONVERT - 1);
 }
 
 PieceColor getColorOfPieceByPosition(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& position)
 {
-	int position0, position1;
-	std::tie(position0, position1) = positionStringToInt(position);
-	if (std::isupper(board[position0][position1]))
+	unsigned int row, col;
+	std::tie(row, col) = positionStringToInt(position);
+	if (std::isupper(board[row][col])) // is white piece
 	{
 		return PieceColor::white;
 	}
-	else if (std::islower(board[position0][position1]))
+	else if (std::islower(board[row][col])) // is black piece
 	{
 		return PieceColor::black;
 	}
@@ -36,11 +37,11 @@ unsigned int checkPlayerTurn(const Player(&players)[NUM_OF_PLAYERS])
 	}
 }
 
-PieceType getTypeOfPieceByPostion(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& position)
+PieceType getTypeOfPieceByPosition(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& position)
 {
-	int position0, position1;
-	std::tie(position0, position1) = positionStringToInt(position);
-	char piece = board[position0][position1];
+	int row, col;
+	std::tie(row, col) = positionStringToInt(position);
+	const char piece = board[row][col];
 
 	switch (piece)
 	{

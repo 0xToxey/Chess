@@ -14,15 +14,15 @@ public:
 	bool isWhite() const;
 
 	// SETTRES
-	void setCurrentPosition(const std::string& positionToMoveFrom);
+	void setCurrentPosition(const std::string& posToMoveFrom);
 
 	virtual bool isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveTo) = 0;
 
 protected:
 	virtual bool isMovingAcrossPieces(
 		const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
-		const unsigned int& rowToMoveFrom, const unsigned int& columnToMoveFrom,
-		const unsigned int& rowToMoveTo, const unsigned int& columnToMoveTo) = 0;
+		const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
+		const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo) = 0;
 	
 	PieceType _type;
 	std::string _currentPosition;

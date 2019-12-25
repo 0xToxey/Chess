@@ -8,20 +8,20 @@ class MoveChecker
 public:
 	MoveChecker();
 
-	int checkMove(
+	MoveCode checkMove(
 		const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 		const Player(&players)[NUM_OF_PLAYERS],
-		const std::string& positionToMoveFrom,
-		const std::string& positionToMoveTo);
+		const std::string& posToMoveFrom,
+		const std::string& posToMoveTo);
 
 private:
 
 	ChessPieces::Rook _rook;
 	ChessPieces::King _king;
 
-	int case2(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveFrom, const bool& isWhite);
-	int case3(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
-	int case6(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
-	int case7(const std::string& positionToMoveFrom, const std::string& positionToMoveTo);
+	MoveCode isMovingOtherPlayerPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const bool& isWhite);
+	MoveCode IsEatingSelf(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo);
+	MoveCode isCapableMove(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo);
+	MoveCode isMoving(const std::string& posToMoveFrom, const std::string& posToMoveTo);
 
 };

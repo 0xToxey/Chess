@@ -1,5 +1,4 @@
 #pragma once
-#define PIECES_PER_PLAYER 16
 
 class Player
 {
@@ -13,5 +12,5 @@ public:
 
 protected:
 	bool _playerTurn;
-	bool _white;  // whice means if he's starting and what side his pawns move
+	bool _white;  // which means if he's starting and what side his pawns move
 };

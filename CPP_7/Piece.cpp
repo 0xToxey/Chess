@@ -17,9 +17,9 @@ std::string Piece::getCurrentPosition() const
 	return this->_currentPosition;
 }
 
-void Piece::setCurrentPosition(const std::string& positionToMoveFrom)
+void Piece::setCurrentPosition(const std::string& posToMoveFrom)
 {
-	this->_currentPosition = positionToMoveFrom;
+	this->_currentPosition = posToMoveFrom;
 }
 
 bool Piece::isWhite() const

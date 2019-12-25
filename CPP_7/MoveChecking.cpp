@@ -8,69 +8,70 @@ MoveChecker::MoveChecker() :
 {
 };
 
-int MoveChecker::checkMove(
+MoveCode MoveChecker::checkMove(
 	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 	const Player (&players)[NUM_OF_PLAYERS],
-	const std::string& positionToMoveFrom,
-	const std::string& positionToMoveTo)
+	const std::string& posToMoveFrom,
+	const std::string& posToMoveTo)
 {
-	unsigned int IndexOfPlayerTurn = checkPlayerTurn(players);
-	
+	const unsigned int IndexOfPlayerTurn = checkPlayerTurn(players);
+	MoveCode moveCode;
 
-	if (case2(board, positionToMoveFrom, players[IndexOfPlayerTurn].isWhite()) == CASE_2_INVALID)
+	if (isMovingOtherPlayerPieces(board, posToMoveFrom, players[IndexOfPlayerTurn].isWhite()) == MoveCode::NotPlayerPiece)
 	{
-		return CASE_2_INVALID;
+		return MoveCode::NotPlayerPiece;
 	}
-	else if (case3(board, positionToMoveFrom, positionToMoveTo) == CASE_3_INVALID)
+	else if (IsEatingSelf(board, posToMoveFrom, posToMoveTo) == MoveCode::EatingSelf)
 	{
-		return CASE_3_INVALID;
+		return MoveCode::EatingSelf;
 	}
-	else if (case7(positionToMoveFrom, positionToMoveTo) == CASE_7_INVALID)
+	else if (isMoving(posToMoveFrom, posToMoveTo) == MoveCode::NotMoving)
 	{
-		return CASE_7_INVALID;
+		return MoveCode::NotMoving;
 	}
-	else if (case6(board, positionToMoveFrom, positionToMoveTo) == CASE_6_INVALID)
+	else if (isCapableMove(board, posToMoveFrom, posToMoveTo) == MoveCode::NotCapableMove)
 	{
-		return CASE_6_INVALID;
+		return MoveCode::NotCapableMove;
 	}
 
-	return VALID_CHECK;
+	return MoveCode::ValidMove;
 }
 
-int MoveChecker::case2(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveFrom, const bool& isWhite)
+MoveCode MoveChecker::isMovingOtherPlayerPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const bool& isWhite)
 {
-	if (getColorOfPieceByPosition(board, positionToMoveFrom) == PieceColor::empty)
-	{
-		return CASE_2_INVALID;
-	}
-
-	switch (getColorOfPieceByPosition(board, positionToMoveFrom))
+	// checking if the player is trying to move pieces that aren't his
+	switch (getColorOfPieceByPosition(board, posToMoveFrom))
 	{
 		case PieceColor::white:
-			return ((isWhite) ? VALID_CHECK : CASE_2_INVALID);
+			return ((isWhite) ? MoveCode::ValidMove : MoveCode::NotPlayerPiece);
 		case PieceColor::black:
-			return ((isWhite) ? CASE_2_INVALID : VALID_CHECK);
+			return ((isWhite) ? MoveCode::NotPlayerPiece : MoveCode::ValidMove);
+		case PieceColor::empty:
+			return MoveCode::NotPlayerPiece;
 	}
 }
 
-int MoveChecker::case3(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveFrom, const std::string& positionToMoveTo)
+MoveCode MoveChecker::IsEatingSelf(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
 {
-	if (getColorOfPieceByPosition(board, positionToMoveFrom) == getColorOfPieceByPosition(board, positionToMoveTo))
+	// checking if player is trying to take over his own pieces
+	if (getColorOfPieceByPosition(board, posToMoveFrom) == getColorOfPieceByPosition(board, posToMoveTo))
 	{
-		return CASE_3_INVALID;
+		return MoveCode::EatingSelf;
 	}
-	return VALID_CHECK;
+	return MoveCode::ValidMove;
 }
 
-int MoveChecker::case6(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& positionToMoveFrom, const std::string& positionToMoveTo)
+MoveCode MoveChecker::isCapableMove(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
 {
-	PieceType currentPieceType = getTypeOfPieceByPostion(board, positionToMoveFrom);
+	const PieceType currentPieceType = getTypeOfPieceByPosition(board, posToMoveFrom);
 	bool capableOfMoving = true;
+
+	// checking if the pieces can actually move that way
 	switch (currentPieceType)
 	{
 		case PieceType::king:
-			this->_king.setCurrentPosition(positionToMoveFrom);
-			capableOfMoving = this->_king.isCapableOfMoving(board, positionToMoveTo);
+			this->_king.setCurrentPosition(posToMoveFrom);
+			capableOfMoving = this->_king.isCapableOfMoving(board, posToMoveTo);
 			break;
 
 		case PieceType::queen:
@@ -80,8 +81,8 @@ int MoveChecker::case6(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const
 			break;
 
 		case PieceType::rook:
-			this->_rook.setCurrentPosition(positionToMoveFrom);
-			capableOfMoving = this->_rook.isCapableOfMoving(board, positionToMoveTo);
+			this->_rook.setCurrentPosition(posToMoveFrom);
+			capableOfMoving = this->_rook.isCapableOfMoving(board, posToMoveTo);
 			break;
 
 		case PieceType::knight:
@@ -89,26 +90,24 @@ int MoveChecker::case6(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const
 
 		case PieceType::bishop:
 			break;
-
-		case PieceType::empty:
-			break;
 	}
 
 	if (capableOfMoving == false)
 	{
-		return CASE_6_INVALID;
+		return MoveCode::NotCapableMove;
 	}
-	return VALID_CHECK;
+	return MoveCode::ValidMove;
 
 }
 
-int MoveChecker::case7(const std::string& positionToMoveFrom, const std::string& positionToMoveTo)
+MoveCode MoveChecker::isMoving(const std::string& posToMoveFrom, const std::string& posToMoveTo)
 {
-	if (positionToMoveFrom == positionToMoveTo)
+	// checking if player trying to not move
+	if (posToMoveFrom == posToMoveTo)
 	{
-		return CASE_7_INVALID;
+		return MoveCode::NotMoving;
 	}
-	return VALID_CHECK;
+	return MoveCode::ValidMove;
 }
 
 

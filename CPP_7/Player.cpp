@@ -1,8 +1,8 @@
 #include "Player.hpp"
 
 Player::Player(const bool& white) :
-	_white(white),
-	_playerTurn(white)
+	_playerTurn(white),
+	_white(white)
 {
 };
 
