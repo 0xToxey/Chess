@@ -26,7 +26,7 @@ MoveCode Game::move(const std::string& msgFromGraphics)
 	const std::string posToMoveTo = msgFromGraphics.substr(2, 4);
 
 	const MoveCode moveCode = this->_moveManager.checkMove(this->_board, this->_players, posToMoveFrom, posToMoveTo);
-	
+
 	if (moveCode != MoveCode::ValidMove &&
 		moveCode != MoveCode::MadeCheck &&
 		moveCode != MoveCode::CheckMate)
@@ -34,17 +34,7 @@ MoveCode Game::move(const std::string& msgFromGraphics)
 		return moveCode;
 	}
 
-	this->_moveManager.makeMove(this->_board, posToMoveFrom, posToMoveTo);
+	this->_moveManager.makeMove(this->_players, this->_board, posToMoveFrom, posToMoveTo);
 
-	// changing the players turn
-	const unsigned int playerTurn = checkPlayerTurn(this->_players);
-	this->_players[playerTurn].setTurn(false);
-	this->_players[(playerTurn == 1) ? 0 : 1].setTurn(true);
-
-	// if player moved king, moving king
-	if(posToMoveFrom == this->_players[playerTurn].getKingPosition())
-	{
-		this->_players[playerTurn].setKingPosition(posToMoveTo);
-	}
 	return moveCode;
 }

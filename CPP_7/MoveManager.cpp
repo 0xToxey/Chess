@@ -37,7 +37,6 @@ MoveCode MoveManager::checkMove(
 	{
 		return MoveCode::NotCapableMove;
 	}
-
 	if (isSelfCheck(board, posToMoveFrom, posToMoveTo, currPlayerKingPos, isWhite))
 	{
 		return MoveCode::SelfCheck;
@@ -66,6 +65,22 @@ void MoveManager::makeMove(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const s
 
 	board[rowToMoveTo][colToMoveTo] = board[rowToMoveFrom][colToMoveFrom];
 	board[rowToMoveFrom][colToMoveFrom] = EMPTY_TILE;
+}
+
+void MoveManager::makeMove(Player(&players)[NUM_OF_PLAYERS], char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
+{
+	makeMove(board, posToMoveFrom, posToMoveTo);
+
+	// changing the players turn
+	const unsigned int playerTurn = checkPlayerTurn(players);
+	players[playerTurn].setTurn(false);
+	players[(playerTurn == 1) ? 0 : 1].setTurn(true);
+
+	// if player moved king, moving king in the player setter
+	if (posToMoveFrom == players[playerTurn].getKingPosition())
+	{
+		players[playerTurn].setKingPosition(posToMoveTo);
+	}
 }
 
 bool MoveManager::isMovingOtherPlayerPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const bool& isWhite)

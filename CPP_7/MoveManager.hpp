@@ -14,7 +14,15 @@ public:
 		const std::string& posToMoveFrom,
 		const std::string& posToMoveTo);
 
+	// doing a move without changing the turn
 	void makeMove(
+		char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+		const std::string& posToMoveFrom,
+		const std::string& posToMoveTo);
+
+	// doing a move and changing turn
+	void makeMove(
+		Player(&players)[NUM_OF_PLAYERS],
 		char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 		const std::string& posToMoveFrom,
 		const std::string& posToMoveTo);

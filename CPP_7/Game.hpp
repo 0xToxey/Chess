@@ -9,7 +9,7 @@ class Game
 
 		MoveCode move(const std::string& msgFromGraphics);
 
-	protected:
+	private:
 		MoveManager _moveManager;
 		Player _players[NUM_OF_PLAYERS];
 		char _board[TILES_PER_SIDE][TILES_PER_SIDE];
