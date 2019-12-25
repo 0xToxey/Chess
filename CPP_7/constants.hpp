@@ -9,7 +9,7 @@
 #define ASCII_NUMBER_CONVERT 48
 #define EMPTY_TILE '#'
 
-enum MoveCode
+enum class MoveCode
 {
 	ValidMove = 0,
 	MadeCheck = 1,

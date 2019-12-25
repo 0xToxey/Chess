@@ -36,15 +36,6 @@ MoveCode Game::move(const std::string& msgFromGraphics)
 
 	this->_moveManager.makeMove(this->_board, posToMoveFrom, posToMoveTo);
 
-	for (int i = 0; i < TILES_PER_SIDE; i++)
-	{
-		for (int j = 0; j < TILES_PER_SIDE; j++)
-		{
-			std::cout << this->_board[i][j];
-		}
-		std::cout << "\n";
-	}
-
 	// changing the players turn
 	const unsigned int playerTurn = checkPlayerTurn(this->_players);
 	this->_players[playerTurn].setTurn(false);

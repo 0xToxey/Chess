@@ -48,7 +48,7 @@ void main()
 			// should handle the string the sent from graphics
 			// according the protocol. Ex: e2e4           (move e2 to e4)
 	
-			strcpy_s(msgToGraphics, std::to_string(game.move(msgFromGraphics)).c_str()); // msgToGraphics should contain the result of the operation
+			strcpy_s(msgToGraphics, std::to_string(static_cast<unsigned int>(game.move(msgFromGraphics))).c_str()); // msgToGraphics should contain the result of the operation
 
 			// return result to graphics		
 			p.sendMessageToGraphics(msgToGraphics);
