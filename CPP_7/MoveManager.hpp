@@ -3,16 +3,22 @@
 #include "Pieces.hpp"
 #include <string>
 
-class MoveChecker
+class MoveManager
 {
 public:
-	MoveChecker();
+	MoveManager();
 
 	MoveCode checkMove(
-		const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+		char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 		const Player(&players)[NUM_OF_PLAYERS],
 		const std::string& posToMoveFrom,
 		const std::string& posToMoveTo);
+
+	void makeMove(
+		char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+		const std::string& posToMoveFrom,
+		const std::string& posToMoveTo);
+
 
 private:
 
@@ -23,5 +29,8 @@ private:
 	MoveCode IsEatingSelf(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo);
 	MoveCode isCapableMove(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo);
 	MoveCode isMoving(const std::string& posToMoveFrom, const std::string& posToMoveTo);
+	MoveCode didMakeCheck(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo, const std::string& kingPosition, const bool& isWhite);
+	MoveCode didMakeCheckmate(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo, const std::string& kingPosition, const bool& isWhite);
+
 
 };

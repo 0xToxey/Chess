@@ -8,6 +8,16 @@ std::tuple<unsigned int, unsigned int> positionStringToInt(const std::string& po
 	return std::make_tuple(position[1] - ASCII_NUMBER_CONVERT - 1, position[0] - ASCII_LETTER_CONVERT - 1);
 }
 
+std::string positionIntToString(const std::tuple <unsigned int, unsigned int>& positionInt)
+{
+	// conversion from <1, 4> to e2
+	std::string position;
+	position += static_cast<char>(static_cast<char>(std::get<1>(positionInt) + ASCII_LETTER_CONVERT + 1));
+	position += static_cast<char>(static_cast<char>(std::get<0>(positionInt) + ASCII_NUMBER_CONVERT + 1));
+	
+	return position;
+}
+
 PieceColor getColorOfPieceByPosition(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& position)
 {
 	unsigned int row, col;

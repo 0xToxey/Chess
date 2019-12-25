@@ -1,5 +1,5 @@
 #pragma once
-#include "MoveChecking.hpp"
+#include "MoveManager.hpp"
 
 class Game
 {
@@ -10,7 +10,7 @@ class Game
 		MoveCode move(const std::string& msgFromGraphics);
 
 	protected:
-		MoveChecker _moveChecker;
+		MoveManager _moveManager;
 		Player _players[NUM_OF_PLAYERS];
 		char _board[TILES_PER_SIDE][TILES_PER_SIDE];
 };

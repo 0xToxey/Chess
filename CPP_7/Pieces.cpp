@@ -73,13 +73,14 @@ bool ChessPieces::King::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TIL
 	unsigned int rowToMoveFrom, colToMoveFrom, rowToMoveTo, colToMoveTo;
 
 	std::tie(rowToMoveFrom, colToMoveFrom) = positionStringToInt(this->_currentPosition);
-	std::tie(rowToMoveTo, colToMoveTo) = positionStringToInt(posToMoveTo);\
+	std::tie(rowToMoveTo, colToMoveTo) = positionStringToInt(posToMoveTo);
 	
 	// King can move only 1 tile.
 	const unsigned int colDistance = std::abs(static_cast<int>(colToMoveFrom - colToMoveTo));
 	const unsigned int rowDistance = std::abs(static_cast<int>(rowToMoveFrom - rowToMoveTo));
 
-	if (colDistance != 1 && rowDistance != 1)
+	if ((colDistance != 1 && colDistance != 0) ||
+		(rowDistance != 1 && rowDistance != 0))
 	{
 		return false;
 	}

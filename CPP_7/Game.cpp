@@ -25,23 +25,35 @@ MoveCode Game::move(const std::string& msgFromGraphics)
 	const std::string posToMoveFrom = msgFromGraphics.substr(0, 2);
 	const std::string posToMoveTo = msgFromGraphics.substr(2, 4);
 
-	const MoveCode moveCode = this->_moveChecker.checkMove(this->_board, this->_players, posToMoveFrom, posToMoveTo);
-	if (moveCode != MoveCode::ValidMove)
+	const MoveCode moveCode = this->_moveManager.checkMove(this->_board, this->_players, posToMoveFrom, posToMoveTo);
+	
+	if (moveCode != MoveCode::ValidMove &&
+		moveCode != MoveCode::MadeCheck &&
+		moveCode != MoveCode::CheckMate)
 	{
 		return moveCode;
 	}
 
-	// changing the pieces on the actual board
-	unsigned int rowToMoveFrom, colToMoveFrom, rowToMoveTo, colToMoveTo;
-	std::tie(rowToMoveTo, colToMoveTo) = positionStringToInt(posToMoveTo);
-	std::tie(rowToMoveFrom, colToMoveFrom) = positionStringToInt(posToMoveFrom);
+	this->_moveManager.makeMove(this->_board, posToMoveFrom, posToMoveTo);
 
-	this->_board[rowToMoveTo][colToMoveTo] = this->_board[rowToMoveFrom][colToMoveFrom];
-	this->_board[rowToMoveFrom][colToMoveFrom] = EMPTY_TILE;
+	for (int i = 0; i < TILES_PER_SIDE; i++)
+	{
+		for (int j = 0; j < TILES_PER_SIDE; j++)
+		{
+			std::cout << this->_board[i][j];
+		}
+		std::cout << "\n";
+	}
 
 	// changing the players turn
-	const unsigned int IndexOfPlayerTurn = checkPlayerTurn(this->_players);
-	this->_players[IndexOfPlayerTurn].setTurn(false);
-	this->_players[(IndexOfPlayerTurn == 1) ? 0 : 1].setTurn(true);
+	const unsigned int playerTurn = checkPlayerTurn(this->_players);
+	this->_players[playerTurn].setTurn(false);
+	this->_players[(playerTurn == 1) ? 0 : 1].setTurn(true);
+
+	// if player moved king, moving king
+	if(posToMoveFrom == this->_players[playerTurn].getKingPosition())
+	{
+		this->_players[playerTurn].setKingPosition(posToMoveTo);
+	}
 	return moveCode;
 }
