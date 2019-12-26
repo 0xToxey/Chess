@@ -2,17 +2,18 @@
 #include "Utils.hpp"
 #include <tuple>
 
-ChessPieces::Rook::Rook(const PieceType& type, const std::string& currentPosition, const bool& white) :
-	Piece(type, currentPosition, white)
+ChessPieces::Rook::Rook() : 
+	Piece(PieceType::rook)
 {
 }
 
-bool ChessPieces::Rook::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveTo)
+bool ChessPieces::Rook::isCapableOfMoving(
+	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const std::string& posToMoveFrom,
+	const std::string& posToMoveTo)
 {
-	unsigned int rowToMoveFrom, colToMoveFrom, rowToMoveTo, colToMoveTo;
-
-	std::tie(rowToMoveFrom, colToMoveFrom) = positionStringToInt(this->getCurrentPosition());
-	std::tie(rowToMoveTo, colToMoveTo) = positionStringToInt(posToMoveTo);
+	const auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
+	const auto [rowToMoveTo, colToMoveTo] = Utils::positionStringToIndex(posToMoveTo);
 
 	// checking if player is trying to move into a different column or different row
 	if (rowToMoveFrom != rowToMoveTo && colToMoveFrom != colToMoveTo)
@@ -28,7 +29,10 @@ bool ChessPieces::Rook::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TIL
 	return true;
 }
 
-bool ChessPieces::Rook::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+bool ChessPieces::Rook::isMovingAcrossPieces(
+	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
+	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
 {
 	if (rowToMoveFrom == rowToMoveTo)
 	{
@@ -38,7 +42,7 @@ bool ChessPieces::Rook::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][
 
 		for (unsigned int i = startingColumn; i < endingColumn; i++)
 		{
-			if (board[rowToMoveFrom][i] != EMPTY_TILE)
+			if (board[rowToMoveFrom][i] != EMPTY_TILE)  // if there is a piece in the way
 			{
 				return true;
 			}
@@ -52,7 +56,7 @@ bool ChessPieces::Rook::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][
 
 		for (unsigned int i = startingRow; i < endingRow; i++)
 		{
-			if (board[i][colToMoveFrom] != EMPTY_TILE)
+			if (board[i][colToMoveFrom] != EMPTY_TILE) // if there is a piece in the way
 			{
 				return true;
 			}
@@ -62,18 +66,19 @@ bool ChessPieces::Rook::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][
 	return false;
 }
 
-ChessPieces::King::King(const PieceType& type, const std::string& currentPosition, const bool& white) :
-	Piece(type, currentPosition, white)
+ChessPieces::King::King() :
+	Piece(PieceType::king)
 {
 }
 
-bool ChessPieces::King::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveTo)
+bool ChessPieces::King::isCapableOfMoving(
+	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const std::string& posToMoveFrom,
+	const std::string& posToMoveTo)
 {
 	// Move variables
-	unsigned int rowToMoveFrom, colToMoveFrom, rowToMoveTo, colToMoveTo;
-
-	std::tie(rowToMoveFrom, colToMoveFrom) = positionStringToInt(this->_currentPosition);
-	std::tie(rowToMoveTo, colToMoveTo) = positionStringToInt(posToMoveTo);
+	const auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
+	const auto [rowToMoveTo, colToMoveTo] = Utils::positionStringToIndex(posToMoveTo);
 	
 	// King can move only 1 tile.
 	const unsigned int colDistance = std::abs(static_cast<int>(colToMoveFrom - colToMoveTo));
@@ -88,7 +93,10 @@ bool ChessPieces::King::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TIL
 	return true;
 }
 
-bool ChessPieces::King::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+bool ChessPieces::King::isMovingAcrossPieces(
+	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
+	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
 {
 	return false; // will never move across pieces
 }

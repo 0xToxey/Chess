@@ -7,7 +7,7 @@ Game::Game() :
 	_players{ Player(true), Player(false) },
 	_board{ NULL }
 {
-	//copy the game board into the board array.
+	//copying the game board into the board array.
 	const char* arrayBoard = "R##K###R################################################r##k###r";
 	memcpy(this->_board, arrayBoard, TILES_PER_SIDE* TILES_PER_SIDE);
 }

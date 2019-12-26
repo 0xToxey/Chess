@@ -1,28 +1,11 @@
 #include "Piece.hpp"
 
-Piece::Piece(const PieceType& type, const std::string& currentPosition, const bool& white) :
-	_type(type),
-	_currentPosition(currentPosition),
-	_white(white)
+Piece::Piece(const PieceType& type) :
+	_type(type)
 {
 };
 
 PieceType Piece::getType() const
 {
 	return this->_type;
-}
-
-std::string Piece::getCurrentPosition() const
-{
-	return this->_currentPosition;
-}
-
-void Piece::setCurrentPosition(const std::string& posToMoveFrom)
-{
-	this->_currentPosition = posToMoveFrom;
-}
-
-bool Piece::isWhite() const
-{
-	return this->_white;
 }

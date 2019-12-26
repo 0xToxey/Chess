@@ -6,11 +6,13 @@ class Player
 public:
 	Player(const bool& white);
 
-	void setTurn(const bool& playerTurn);
-
-	bool isWhite() const;
+	// GETTERS
 	bool isPlayerTurn() const;
+	bool isWhite() const;
 	std::string getKingPosition() const;
+
+	// SETTRS
+	void setTurn(const bool& playerTurn);
 	void setKingPosition(const std::string& position);
 
 protected:

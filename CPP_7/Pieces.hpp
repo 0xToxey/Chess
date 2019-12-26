@@ -7,9 +7,12 @@ namespace ChessPieces
 	{
 	public:
 		// C'TOR
-		Rook(const PieceType& type, const std::string& currentPosition, const bool& white);
+		Rook();
 
-		virtual bool isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveTo);
+		virtual bool isCapableOfMoving(
+			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], 
+			const std::string& posToMoveFrom,
+			const std::string& posToMoveTo);
 	
 	protected:
 		virtual bool isMovingAcrossPieces(
@@ -23,9 +26,12 @@ namespace ChessPieces
 	{
 	public:
 		// C'TOR
-		King(const PieceType& type, const std::string& currentPosition, const bool& white);
+		King();
 
-		virtual bool isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveTo);
+		virtual bool isCapableOfMoving(
+			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const std::string& posToMoveFrom,
+			const std::string& posToMoveTo);
 
 	protected:
 		// King always will be able to move without moving across other piece.

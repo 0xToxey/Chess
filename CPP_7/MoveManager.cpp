@@ -4,8 +4,8 @@
 #include <tuple>
 
 MoveManager::MoveManager() :
-	_rook(PieceType::rook, "00", false),
-	_king(PieceType::king, "00", false)
+	_rook(),
+	_king()
 {
 };
 
@@ -15,13 +15,13 @@ MoveCode MoveManager::checkMove(
 	const std::string& posToMoveFrom,
 	const std::string& posToMoveTo)
 {
-	const unsigned int playerTurn = checkPlayerTurn(players);
-	const bool isWhite = players[playerTurn].isWhite();
-	std::string otherPlayerKingPos = players[(playerTurn == 1) ? 0 : 1].getKingPosition();
-	std::string currPlayerKingPos = players[playerTurn].getKingPosition();
+	const unsigned int currPlayerTurn = Utils::WhoseTurnIsIt(players);
+	const bool isCurrPlayerWhite = players[currPlayerTurn].isWhite();
+	std::string otherPlayerKingPos = players[(currPlayerTurn == 1) ? 0 : 1].getKingPosition();
+	std::string currPlayerKingPos = players[currPlayerTurn].getKingPosition();
 
 	// checking if the move is valid
-	if (isMovingOtherPlayerPieces(board, posToMoveFrom, isWhite))
+	if (isMovingOtherPlayerPieces(board, posToMoveFrom, isCurrPlayerWhite))
 	{
 		return MoveCode::NotPlayerPiece;
 	}
@@ -33,19 +33,19 @@ MoveCode MoveManager::checkMove(
 	{
 		return MoveCode::NotMoving;
 	}
-	if (isntCapableMove(board, posToMoveFrom, posToMoveTo))
+	if (isCapableMove(board, posToMoveFrom, posToMoveTo) == false)
 	{
 		return MoveCode::NotCapableMove;
 	}
-	if (isSelfCheck(board, posToMoveFrom, posToMoveTo, currPlayerKingPos, isWhite))
+	if (isSelfCheck(board, posToMoveFrom, posToMoveTo, currPlayerKingPos, isCurrPlayerWhite))
 	{
 		return MoveCode::SelfCheck;
 	}
 
 	// in case the move is valid checking for check
-	if (didMakeCheck(board, posToMoveFrom, posToMoveTo, otherPlayerKingPos, isWhite))
+	if (didMakeCheck(board, posToMoveFrom, posToMoveTo, otherPlayerKingPos, isCurrPlayerWhite))
 	{
-		if (didMakeCheckmate(board, posToMoveFrom, posToMoveTo, otherPlayerKingPos, isWhite))
+		if (didMakeCheckmate(board, posToMoveFrom, posToMoveTo, otherPlayerKingPos, isCurrPlayerWhite))
 		{
 			return MoveCode::CheckMate;
 		}
@@ -57,36 +57,45 @@ MoveCode MoveManager::checkMove(
 	return MoveCode::ValidMove;
 }
 
-void MoveManager::makeMove(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
+void MoveManager::makeMove(
+	char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const std::string& posToMoveFrom,
+	const std::string& posToMoveTo)
 {
-	unsigned int rowToMoveFrom, colToMoveFrom, rowToMoveTo, colToMoveTo;
-	std::tie(rowToMoveTo, colToMoveTo) = positionStringToInt(posToMoveTo);
-	std::tie(rowToMoveFrom, colToMoveFrom) = positionStringToInt(posToMoveFrom);
+	auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
+	auto [rowToMoveTo, colToMoveTo] = Utils::positionStringToIndex(posToMoveTo);
 
 	board[rowToMoveTo][colToMoveTo] = board[rowToMoveFrom][colToMoveFrom];
 	board[rowToMoveFrom][colToMoveFrom] = EMPTY_TILE;
 }
 
-void MoveManager::makeMove(Player(&players)[NUM_OF_PLAYERS], char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
+void MoveManager::makeMove(
+	Player(&players)[NUM_OF_PLAYERS],
+	char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const std::string& posToMoveFrom,
+	const std::string& posToMoveTo)
 {
 	makeMove(board, posToMoveFrom, posToMoveTo);
 
 	// changing the players turn
-	const unsigned int playerTurn = checkPlayerTurn(players);
-	players[playerTurn].setTurn(false);
-	players[(playerTurn == 1) ? 0 : 1].setTurn(true);
+	const unsigned int currPlayerTurn = Utils::WhoseTurnIsIt(players);
+	players[currPlayerTurn].setTurn(false);
+	players[(currPlayerTurn == 1) ? 0 : 1].setTurn(true);
 
 	// if player moved king, moving king in the player setter
-	if (posToMoveFrom == players[playerTurn].getKingPosition())
+	if (posToMoveFrom == players[currPlayerTurn].getKingPosition())
 	{
-		players[playerTurn].setKingPosition(posToMoveTo);
+		players[currPlayerTurn].setKingPosition(posToMoveTo);
 	}
 }
 
-bool MoveManager::isMovingOtherPlayerPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const bool& isWhite)
+bool MoveManager::isMovingOtherPlayerPieces(
+	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const std::string& posToMoveFrom,
+	const bool& isWhite)
 {
 	// checking if the player is trying to move pieces that aren't his
-	switch (getColorOfPieceByPosition(board, posToMoveFrom))
+	switch (Utils::getColorOfPieceByPosition(board, posToMoveFrom))
 	{
 	case PieceColor::white:
 		return ((isWhite) ? false : true);
@@ -97,27 +106,32 @@ bool MoveManager::isMovingOtherPlayerPieces(const char(&board)[TILES_PER_SIDE][T
 	}
 }
 
-bool MoveManager::isEatingSelf(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
+bool MoveManager::isEatingSelf(
+	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const std::string& posToMoveFrom,
+	const std::string& posToMoveTo)
 {
 	// checking if player is trying to take over his own pieces
-	if (getColorOfPieceByPosition(board, posToMoveFrom) == getColorOfPieceByPosition(board, posToMoveTo))
+	if (Utils::getColorOfPieceByPosition(board, posToMoveFrom) == Utils::getColorOfPieceByPosition(board, posToMoveTo))
 	{
 		return true;
 	}
 	return false;
 }
 
-bool MoveManager::isntCapableMove(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
+bool MoveManager::isCapableMove(
+	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const std::string& posToMoveFrom,
+	const std::string& posToMoveTo)
 {
-	const PieceType currentPieceType = getTypeOfPieceByPosition(board, posToMoveFrom);
+	const PieceType currentPieceType = Utils::getTypeOfPieceByPosition(board, posToMoveFrom);
 	bool capableOfMoving = true;
 
 	// checking if the pieces can actually move that way
 	switch (currentPieceType)
 	{
 	case PieceType::king:
-		this->_king.setCurrentPosition(posToMoveFrom);
-		capableOfMoving = this->_king.isCapableOfMoving(board, posToMoveTo);
+		capableOfMoving = this->_king.isCapableOfMoving(board, posToMoveFrom, posToMoveTo);
 		break;
 
 	case PieceType::queen:
@@ -127,8 +141,7 @@ bool MoveManager::isntCapableMove(const char(&board)[TILES_PER_SIDE][TILES_PER_S
 		break;
 
 	case PieceType::rook:
-		this->_rook.setCurrentPosition(posToMoveFrom);
-		capableOfMoving = this->_rook.isCapableOfMoving(board, posToMoveTo);
+		capableOfMoving = this->_rook.isCapableOfMoving(board, posToMoveFrom, posToMoveTo);
 		break;
 
 	case PieceType::knight:
@@ -138,7 +151,7 @@ bool MoveManager::isntCapableMove(const char(&board)[TILES_PER_SIDE][TILES_PER_S
 		break;
 	}
 
-	return (capableOfMoving == false) ? true : false;
+	return capableOfMoving;
 }
 
 bool MoveManager::isntMoving(const std::string& posToMoveFrom, const std::string& posToMoveTo)
@@ -151,48 +164,59 @@ bool MoveManager::isntMoving(const std::string& posToMoveFrom, const std::string
 	return false;
 }
 
-bool MoveManager::didMakeCheck(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
-	const std::string& posToMoveFrom, const std::string& posToMoveTo,
-	std::string kingPosition, const bool& isWhite)
+bool MoveManager::isSelfCheck(
+	char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const std::string& posToMoveFrom,
+	const std::string& posToMoveTo,
+	std::string& currPlayerkingPos,
+	const bool& isWhite)
 {
-	// in case trying to protect the king by moving it
-	if (kingPosition == posToMoveFrom)
-	{
-		kingPosition = posToMoveTo;
-	}
+	// checking if black player can check
+	return didMakeCheck(board, posToMoveFrom, posToMoveTo, currPlayerkingPos, !isWhite);
+}
 
-	unsigned int kingRow, kingCol;
-	std::tie(kingRow, kingCol) = positionStringToInt(kingPosition);
+bool MoveManager::didMakeCheck(
+	char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const std::string& posToMoveFrom,
+	const std::string& posToMoveTo,
+	std::string otherPlayerKingPos, // not a reference cause maybe changing it
+	const bool& isWhite)
+{
+
 	const PieceColor currentPlayerColor = (isWhite) ? PieceColor::white : PieceColor::black;
-
 	// saving a piece in case eating one when faking a move
-	unsigned int pieceToSaveRow, pieceToSaveCol;
-	std::tie(pieceToSaveRow, pieceToSaveCol) = positionStringToInt(posToMoveTo);
+	auto [pieceToSaveRow, pieceToSaveCol] = Utils::positionStringToIndex(posToMoveTo);
 	const char pieceToSave = board[pieceToSaveRow][pieceToSaveCol];
+	bool isCheck = false;
+
+	// in case trying to protect the king by moving it
+	if (otherPlayerKingPos == posToMoveFrom)
+	{
+		otherPlayerKingPos = posToMoveTo;
+	}
 
 	// faking a move
 	makeMove(board, posToMoveFrom, posToMoveTo);
 
-	for (unsigned int i = 0; i < TILES_PER_SIDE; i++)
+	// going over the board
+	for (unsigned int i = 0; i < TILES_PER_SIDE && !isCheck; i++)
 	{
-		for (unsigned int j = 0; j < TILES_PER_SIDE; j++)
+		for (unsigned int j = 0; j < TILES_PER_SIDE && !isCheck; j++)
 		{
 			if (board[i][j] == EMPTY_TILE)
 			{
 				continue; // move to next piece
 			}
 
-			std::string piecePosition = positionIntToString(std::make_tuple(i, j));
+			std::string currPiecePosition = Utils::positionIndexToString(std::make_tuple(i, j));
 
 			// if any piece of current player will cause a check
-			if (getColorOfPieceByPosition(board, piecePosition) == currentPlayerColor)
+			if (Utils::getColorOfPieceByPosition(board, currPiecePosition) == currentPlayerColor)
 			{
-				if (isntCapableMove(board, piecePosition, kingPosition) == false)
+				if (isCapableMove(board, currPiecePosition, otherPlayerKingPos)) // checking if can eat the king
 				{
-					// reverting the move
-					makeMove(board, posToMoveTo, posToMoveFrom);
-					insertPieceIntoBoard(board, pieceToSave, posToMoveTo);
-					return true;
+					isCheck = true;
+					break;
 				}
 			}
 		}
@@ -200,26 +224,30 @@ bool MoveManager::didMakeCheck(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 
 	// reverting the move
 	makeMove(board, posToMoveTo, posToMoveFrom);
-	insertPieceIntoBoard(board, pieceToSave, posToMoveTo);
-	return false;
+	Utils::insertPieceIntoBoard(board, pieceToSave, posToMoveTo);
+	return isCheck;
 }
 
-bool MoveManager::didMakeCheckmate(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo, std::string& kingPosition, const bool& isWhite)
+bool MoveManager::didMakeCheckmate(
+	char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const std::string& posToMoveFrom,
+	const std::string& posToMoveTo,
+	std::string& currPlayerKingPos,
+	const bool& isWhite)
 {
-	unsigned int kingRow, kingCol;
-	std::tie(kingRow, kingCol) = positionStringToInt(kingPosition);
+	bool isCheckmate = true;
 	const PieceColor otherPlayerColor = (isWhite) ? PieceColor::black : PieceColor::white;
 
 	// saving a piece in case eating one when faking a move
-	unsigned int pieceToSaveRow, pieceToSaveCol;
-	std::tie(pieceToSaveRow, pieceToSaveCol) = positionStringToInt(posToMoveTo);
+	auto [pieceToSaveRow, pieceToSaveCol] = Utils::positionStringToIndex(posToMoveTo);
 	const char pieceToSave = board[pieceToSaveRow][pieceToSaveCol];
 	// faking a move
 	makeMove(board, posToMoveFrom, posToMoveTo);
 
-	for (unsigned int i = 0; i < TILES_PER_SIDE; i++)
+	// going over all the pieces in the board
+	for (unsigned int i = 0; i < TILES_PER_SIDE && isCheckmate; i++)
 	{
-		for (unsigned int j = 0; j < TILES_PER_SIDE; j++)
+		for (unsigned int j = 0; j < TILES_PER_SIDE && isCheckmate; j++)
 		{
 			// if isn't a piece
 			if (board[i][j] == EMPTY_TILE)
@@ -227,27 +255,24 @@ bool MoveManager::didMakeCheckmate(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 				continue; // move to next piece
 			}
 
-			std::string piecePosition = positionIntToString(std::make_tuple(i, j));
+			std::string piecePosition = Utils::positionIndexToString(std::make_tuple(i, j));
 			
 			// if any piece of current player may save the king
-			if (getColorOfPieceByPosition(board, piecePosition) == otherPlayerColor)
+			if (Utils::getColorOfPieceByPosition(board, piecePosition) == otherPlayerColor)
 			{
 				// going over every place in the board to check if can save the king
-				for (unsigned int k = 0; k < TILES_PER_SIDE; k++)
+				for (unsigned int k = 0; k < TILES_PER_SIDE && isCheckmate; k++)
 				{
-					for (unsigned int l = 0; l < TILES_PER_SIDE; l++)
+					for (unsigned int l = 0; l < TILES_PER_SIDE && isCheckmate; l++)
 					{
-						std::string positionToTest = positionIntToString(std::make_tuple(k, l));
+						std::string positionToTest = Utils::positionIndexToString(std::make_tuple(k, l));
 						
-						if (isntCapableMove(board, piecePosition, positionToTest) == false)
+						if (isCapableMove(board, piecePosition, positionToTest))
 						{
 							// checking if the king won't be in check after moving
-							if (didMakeCheck(board, piecePosition, positionToTest, kingPosition, isWhite) == false)
+							if (didMakeCheck(board, piecePosition, positionToTest, currPlayerKingPos, isWhite) == false)
 							{
-								// reverting the move
-								makeMove(board, posToMoveTo, posToMoveFrom);
-								insertPieceIntoBoard(board, pieceToSave, posToMoveTo);
-								return false;
+								isCheckmate = false;
 							}
 						}
 					}
@@ -257,20 +282,7 @@ bool MoveManager::didMakeCheckmate(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 	}
 	// reverting the move
 	makeMove(board, posToMoveTo, posToMoveFrom);
-	insertPieceIntoBoard(board, pieceToSave, posToMoveTo);
-	return true;
+	Utils::insertPieceIntoBoard(board, pieceToSave, posToMoveTo);
+	return isCheckmate;
 }
-
-bool MoveManager::isSelfCheck(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
-	const std::string& posToMoveFrom, const std::string& posToMoveTo,
-	std::string& kingPosition, const bool& isWhite)
-{
-	if (didMakeCheck(board, posToMoveFrom, posToMoveTo, kingPosition, !isWhite) == true)
-	{
-		return true;
-	}
-
-	return false;
-}
-
 
