@@ -37,8 +37,8 @@ private:
 	bool isEatingSelf(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo);
 	bool isntCapableMove(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo);
 	bool isntMoving(const std::string& posToMoveFrom, const std::string& posToMoveTo);
-	bool didMakeCheck(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo, std::string& kingPosition, const bool& isWhite);
-	bool didMakeCheckmate(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo, const std::string& kingPosition, const bool& isWhite);
+	bool didMakeCheck(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo, std::string kingPosition, const bool& isWhite);
+	bool didMakeCheckmate(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo, std::string& kingPosition, const bool& isWhite);
 	bool isSelfCheck(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo, std::string& kingPosition, const bool& isWhite);
 
 

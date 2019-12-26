@@ -71,3 +71,10 @@ PieceType getTypeOfPieceByPosition(const char(&board)[TILES_PER_SIDE][TILES_PER_
 			return PieceType::empty;
 	}
 }
+
+void insertPieceIntoBoard(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const char& piece, const std::string& position)
+{
+	unsigned int row, col;
+	std::tie(row, col) = positionStringToInt(position);
+	board[row][col] = piece;
+}

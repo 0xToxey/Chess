@@ -35,6 +35,5 @@ MoveCode Game::move(const std::string& msgFromGraphics)
 	}
 
 	this->_moveManager.makeMove(this->_players, this->_board, posToMoveFrom, posToMoveTo);
-
 	return moveCode;
 }

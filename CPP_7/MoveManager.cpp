@@ -21,7 +21,7 @@ MoveCode MoveManager::checkMove(
 	std::string currPlayerKingPos = players[playerTurn].getKingPosition();
 
 	// checking if the move is valid
-	if (isMovingOtherPlayerPieces(board, posToMoveFrom, players[playerTurn].isWhite()))
+	if (isMovingOtherPlayerPieces(board, posToMoveFrom, isWhite))
 	{
 		return MoveCode::NotPlayerPiece;
 	}
@@ -153,7 +153,7 @@ bool MoveManager::isntMoving(const std::string& posToMoveFrom, const std::string
 
 bool MoveManager::didMakeCheck(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 	const std::string& posToMoveFrom, const std::string& posToMoveTo,
-	std::string& kingPosition, const bool& isWhite)
+	std::string kingPosition, const bool& isWhite)
 {
 	// in case trying to protect the king by moving it
 	if (kingPosition == posToMoveFrom)
@@ -164,6 +164,11 @@ bool MoveManager::didMakeCheck(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 	unsigned int kingRow, kingCol;
 	std::tie(kingRow, kingCol) = positionStringToInt(kingPosition);
 	const PieceColor currentPlayerColor = (isWhite) ? PieceColor::white : PieceColor::black;
+
+	// saving a piece in case eating one when faking a move
+	unsigned int pieceToSaveRow, pieceToSaveCol;
+	std::tie(pieceToSaveRow, pieceToSaveCol) = positionStringToInt(posToMoveTo);
+	const char pieceToSave = board[pieceToSaveRow][pieceToSaveCol];
 
 	// faking a move
 	makeMove(board, posToMoveFrom, posToMoveTo);
@@ -186,6 +191,7 @@ bool MoveManager::didMakeCheck(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 				{
 					// reverting the move
 					makeMove(board, posToMoveTo, posToMoveFrom);
+					insertPieceIntoBoard(board, pieceToSave, posToMoveTo);
 					return true;
 				}
 			}
@@ -194,14 +200,65 @@ bool MoveManager::didMakeCheck(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 
 	// reverting the move
 	makeMove(board, posToMoveTo, posToMoveFrom);
+	insertPieceIntoBoard(board, pieceToSave, posToMoveTo);
 	return false;
 }
 
-bool MoveManager::didMakeCheckmate(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
-	const std::string& posToMoveFrom, const std::string& posToMoveTo,
-	const std::string& kingPosition, const bool& isWhite)
+bool MoveManager::didMakeCheckmate(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo, std::string& kingPosition, const bool& isWhite)
 {
-	return false;
+	unsigned int kingRow, kingCol;
+	std::tie(kingRow, kingCol) = positionStringToInt(kingPosition);
+	const PieceColor otherPlayerColor = (isWhite) ? PieceColor::black : PieceColor::white;
+
+	// saving a piece in case eating one when faking a move
+	unsigned int pieceToSaveRow, pieceToSaveCol;
+	std::tie(pieceToSaveRow, pieceToSaveCol) = positionStringToInt(posToMoveTo);
+	const char pieceToSave = board[pieceToSaveRow][pieceToSaveCol];
+	// faking a move
+	makeMove(board, posToMoveFrom, posToMoveTo);
+
+	for (unsigned int i = 0; i < TILES_PER_SIDE; i++)
+	{
+		for (unsigned int j = 0; j < TILES_PER_SIDE; j++)
+		{
+			// if isn't a piece
+			if (board[i][j] == EMPTY_TILE)
+			{
+				continue; // move to next piece
+			}
+
+			std::string piecePosition = positionIntToString(std::make_tuple(i, j));
+			
+			// if any piece of current player may save the king
+			if (getColorOfPieceByPosition(board, piecePosition) == otherPlayerColor)
+			{
+				// going over every place in the board to check if can save the king
+				for (unsigned int k = 0; k < TILES_PER_SIDE; k++)
+				{
+					for (unsigned int l = 0; l < TILES_PER_SIDE; l++)
+					{
+						std::string positionToTest = positionIntToString(std::make_tuple(k, l));
+						
+						if (isntCapableMove(board, piecePosition, positionToTest) == false)
+						{
+							// checking if the king won't be in check after moving
+							if (didMakeCheck(board, piecePosition, positionToTest, kingPosition, isWhite) == false)
+							{
+								// reverting the move
+								makeMove(board, posToMoveTo, posToMoveFrom);
+								insertPieceIntoBoard(board, pieceToSave, posToMoveTo);
+								return false;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	// reverting the move
+	makeMove(board, posToMoveTo, posToMoveFrom);
+	insertPieceIntoBoard(board, pieceToSave, posToMoveTo);
+	return true;
 }
 
 bool MoveManager::isSelfCheck(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],

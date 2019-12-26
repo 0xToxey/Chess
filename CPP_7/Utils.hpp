@@ -10,3 +10,4 @@ std::string positionIntToString(const std::tuple <unsigned int, unsigned int>& p
 PieceColor getColorOfPieceByPosition(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& position);
 unsigned int checkPlayerTurn(const Player(&players)[NUM_OF_PLAYERS]);
 PieceType getTypeOfPieceByPosition(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& position);
+void insertPieceIntoBoard(char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const char& piece, const std::string& position);
