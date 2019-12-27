@@ -51,8 +51,28 @@ namespace ChessPieces
 			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 			const std::string& posToMoveFrom,
 			const std::string& posToMoveTo);
+
 	protected:
 		// kinght can jump acroos other picese 
+		virtual bool isMovingAcrossPieces(
+			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
+			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo);
+	};
+
+	class Bishop : public Piece
+	{
+	public:
+		// C'TOR
+		Bishop();
+
+		virtual bool isCapableOfMoving(
+			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const std::string& posToMoveFrom,
+			const std::string& posToMoveTo);
+
+	protected:
+
 		virtual bool isMovingAcrossPieces(
 			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 			const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,

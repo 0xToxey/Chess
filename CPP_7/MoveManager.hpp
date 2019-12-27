@@ -34,6 +34,7 @@ private:
 	ChessPieces::Rook _rook;
 	ChessPieces::King _king;
 	ChessPieces::Knight _knight;
+	ChessPieces::Bishop _bishop;
 
 	// checking if player is trying to move his own pieces
 	bool isMovingOtherPlayerPieces(

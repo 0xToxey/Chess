@@ -150,6 +150,7 @@ bool MoveManager::isCapableMove(
 		break;
 
 	case PieceType::bishop:
+		capableOfMoving = this->_bishop.isCapableOfMoving(board, posToMoveFrom, posToMoveTo);
 		break;
 	}
 

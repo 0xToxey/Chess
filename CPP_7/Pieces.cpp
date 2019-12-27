@@ -129,3 +129,72 @@ bool ChessPieces::Knight::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE
 {
 	return false;
 }
+
+ChessPieces::Bishop::Bishop() :
+	Piece(PieceType::bishop)
+{
+}
+
+bool ChessPieces::Bishop::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
+{
+	// Move variables
+	const auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
+	const auto [rowToMoveTo, colToMoveTo] = Utils::positionStringToIndex(posToMoveTo);
+
+	const unsigned int colDistance = std::abs(static_cast<int>(colToMoveFrom - colToMoveTo));
+	const unsigned int rowDistance = std::abs(static_cast<int>(rowToMoveFrom - rowToMoveTo));
+
+	// The row and column in bishop movment need's to be equal
+	if (colDistance != rowDistance)
+	{
+		return false;
+	}
+
+	// checking if player is trying to move across other pieces
+	if (isMovingAcrossPieces(board, rowToMoveFrom, colToMoveFrom, rowToMoveTo, colToMoveTo))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ChessPieces::Bishop::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+{
+	// The column distance and the row distance are equal in bishop movment.
+	const unsigned int distance = std::abs(static_cast<int>(colToMoveFrom - colToMoveTo));
+	
+	for(int i = 1; i < distance; i++)
+	{
+		if ((rowToMoveFrom < rowToMoveTo) && (colToMoveFrom < colToMoveTo)) // The piece try to move up right.
+		{
+			if (board[rowToMoveFrom + i][colToMoveFrom + i] != EMPTY_TILE)
+			{
+				return true;
+			}
+		}
+		else if ((rowToMoveFrom < rowToMoveTo) && (colToMoveFrom > colToMoveTo)) // The piece try to move up left.
+		{
+			if (board[rowToMoveFrom + i][colToMoveFrom - i] != EMPTY_TILE)
+			{
+				return true;
+			}
+		}
+		else if ((rowToMoveFrom > rowToMoveTo) && (colToMoveFrom > colToMoveTo)) // The piece try to move down left.
+		{
+			if (board[rowToMoveFrom - i][colToMoveFrom - i] != EMPTY_TILE)
+			{
+				return true;
+			}
+		}
+		else if ((rowToMoveFrom < rowToMoveTo) && (colToMoveFrom < colToMoveTo)) // The piece try to move fown right.
+		{
+			if (board[rowToMoveFrom - i][colToMoveFrom + i] != EMPTY_TILE)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
