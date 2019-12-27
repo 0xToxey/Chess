@@ -5,7 +5,8 @@
 
 MoveManager::MoveManager() :
 	_rook(),
-	_king()
+	_king(),
+	_knight()
 {
 };
 
@@ -145,6 +146,7 @@ bool MoveManager::isCapableMove(
 		break;
 
 	case PieceType::knight:
+		capableOfMoving = this->_knight.isCapableOfMoving(board, posToMoveFrom, posToMoveTo);
 		break;
 
 	case PieceType::bishop:

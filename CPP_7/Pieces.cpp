@@ -100,3 +100,32 @@ bool ChessPieces::King::isMovingAcrossPieces(
 {
 	return false; // will never move across pieces
 }
+
+ChessPieces::Knight::Knight() :
+	Piece(PieceType::knight)
+{
+}
+
+bool ChessPieces::Knight::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
+{
+	// Move variables
+	const auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
+	const auto [rowToMoveTo, colToMoveTo] = Utils::positionStringToIndex(posToMoveTo);
+	
+	const unsigned int colDistance = std::abs(static_cast<int>(colToMoveFrom - colToMoveTo));
+	const unsigned int rowDistance = std::abs(static_cast<int>(rowToMoveFrom - rowToMoveTo));
+
+	if ((colDistance != 1 && colDistance != 2) ||
+		(rowDistance != 1 && rowDistance != 2))
+	{
+		return false;
+	}
+		 
+	return true;
+
+}
+
+bool ChessPieces::Knight::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+{
+	return false;
+}

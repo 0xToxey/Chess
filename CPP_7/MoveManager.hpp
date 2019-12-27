@@ -33,6 +33,7 @@ private:
 
 	ChessPieces::Rook _rook;
 	ChessPieces::King _king;
+	ChessPieces::Knight _knight;
 
 	// checking if player is trying to move his own pieces
 	bool isMovingOtherPlayerPieces(
@@ -78,6 +79,4 @@ private:
 		const std::string& posToMoveTo,
 		std::string& kingPosition,
 		const bool& isWhite);
-
-
 };

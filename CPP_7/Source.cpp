@@ -36,7 +36,7 @@ void main()
 
 		char msgToGraphics[1024];
 
-		strcpy_s(msgToGraphics, "r##k###r################################################R##K###R0"); // just example...
+		strcpy_s(msgToGraphics, "rn#k##nr################################################RN#K##NR0"); // just example...
 		Game game;
 		p.sendMessageToGraphics(msgToGraphics);   // send the board string
 
