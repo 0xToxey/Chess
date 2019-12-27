@@ -115,14 +115,13 @@ bool ChessPieces::Knight::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][T
 	const unsigned int colDistance = std::abs(static_cast<int>(colToMoveFrom - colToMoveTo));
 	const unsigned int rowDistance = std::abs(static_cast<int>(rowToMoveFrom - rowToMoveTo));
 
-	if ((colDistance != 1 && colDistance != 2) ||
-		(rowDistance != 1 && rowDistance != 2))
+	if ((colDistance != 1 || rowDistance != 2) &&
+		(colDistance != 2 || rowDistance != 1))
 	{
 		return false;
 	}
-		 
-	return true;
 
+	return true;
 }
 
 bool ChessPieces::Knight::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
