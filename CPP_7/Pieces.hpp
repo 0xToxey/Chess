@@ -78,4 +78,24 @@ namespace ChessPieces
 			const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
 			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo);
 	};
+
+	class Queen : public Piece
+	{
+	public:
+		// C'TOR
+		Queen();
+
+		virtual bool isCapableOfMoving(
+			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const std::string& posToMoveFrom,
+			const std::string& posToMoveTo);
+
+	protected:
+		// The queen use this function throw the bishop or rook piece.
+		virtual bool isMovingAcrossPieces(
+			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
+			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo);
+
+	};
 }

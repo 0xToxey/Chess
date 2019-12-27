@@ -136,6 +136,7 @@ bool MoveManager::isCapableMove(
 		break;
 
 	case PieceType::queen:
+		capableOfMoving = this->_queen.isCapableOfMoving(board, posToMoveFrom, posToMoveTo);
 		break;
 
 	case PieceType::pawn:

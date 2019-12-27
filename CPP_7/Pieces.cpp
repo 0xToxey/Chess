@@ -197,3 +197,33 @@ bool ChessPieces::Bishop::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE
 
 	return false;
 }
+
+ChessPieces::Queen::Queen() : 
+	Piece(PieceType::queen)
+{
+}
+
+bool ChessPieces::Queen::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
+{
+	// queen movment is part of bishop & rook momvent
+	ChessPieces::Bishop _bishop;
+	ChessPieces::Rook _rook;
+
+	bool diagonalMove = _bishop.isCapableOfMoving(board, posToMoveFrom, posToMoveTo);
+	bool straightMove = _rook.isCapableOfMoving(board, posToMoveFrom, posToMoveTo);
+
+	// if the diagonal move or the straight move is possible it means that the queen can move.
+	if (!(diagonalMove || straightMove))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ChessPieces::Queen::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+{
+	return false;
+}
+
+
