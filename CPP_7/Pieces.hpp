@@ -1,5 +1,6 @@
 #pragma once
 #include "Piece.hpp"
+#include "Utils.hpp"
 
 namespace ChessPieces
 {
@@ -97,5 +98,24 @@ namespace ChessPieces
 			const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
 			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo);
 
+	};
+
+	class Pawn : public Piece
+	{
+	public:
+		Pawn();
+
+		virtual bool isCapableOfMoving(
+			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const std::string& posToMoveFrom,
+			const std::string& posToMoveTo);
+
+	protected:
+
+		// The pawn can move only one tile each time. (cannot move accros pieces)
+		virtual bool isMovingAcrossPieces(
+			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
+			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo);
 	};
 }

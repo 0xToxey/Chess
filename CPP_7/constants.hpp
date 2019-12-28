@@ -9,6 +9,9 @@
 #define ASCII_NUMBER_CONVERT 48
 #define EMPTY_TILE '#'
 
+#define WHITE_START_ROW 1
+#define BLACK_START_ROW 6
+
 enum class MoveCode
 {
 	ValidMove = 0,

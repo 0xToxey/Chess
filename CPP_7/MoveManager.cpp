@@ -3,10 +3,7 @@
 #include "Utils.hpp"
 #include <tuple>
 
-MoveManager::MoveManager() :
-	_rook(),
-	_king(),
-	_knight()
+MoveManager::MoveManager()
 {
 };
 
@@ -140,6 +137,7 @@ bool MoveManager::isCapableMove(
 		break;
 
 	case PieceType::pawn:
+		capableOfMoving = this->_pawn.isCapableOfMoving(board, posToMoveFrom, posToMoveTo);
 		break;
 
 	case PieceType::rook:
