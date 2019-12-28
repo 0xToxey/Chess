@@ -106,9 +106,7 @@ ChessPieces::Knight::Knight() :
 {
 }
 
-bool ChessPieces::Knight::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
-	const std::string& posToMoveFrom,
-	const std::string& posToMoveTo)
+bool ChessPieces::Knight::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
 {
 	// Move variables
 	const auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
@@ -126,9 +124,7 @@ bool ChessPieces::Knight::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][T
 	return true;
 }
 
-bool ChessPieces::Knight::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
-	const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+bool ChessPieces::Knight::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
 {
 	return false;
 }
@@ -138,9 +134,7 @@ ChessPieces::Bishop::Bishop() :
 {
 }
 
-bool ChessPieces::Bishop::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
-	const std::string& posToMoveFrom,
-	const std::string& posToMoveTo)
+bool ChessPieces::Bishop::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
 {
 	// Move variables
 	const auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
@@ -164,9 +158,7 @@ bool ChessPieces::Bishop::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][T
 	return true;
 }
 
-bool ChessPieces::Bishop::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
-	const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+bool ChessPieces::Bishop::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
 {
 	// The column distance and the row distance are equal in bishop movment.
 	const unsigned int distance = std::abs(static_cast<int>(colToMoveFrom - colToMoveTo));
@@ -211,9 +203,7 @@ ChessPieces::Queen::Queen() :
 {
 }
 
-bool ChessPieces::Queen::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
-	const std::string& posToMoveFrom,
-	const std::string& posToMoveTo)
+bool ChessPieces::Queen::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
 {
 	// queen movment is part of bishop & rook momvent
 	ChessPieces::Bishop _bishop;
@@ -231,76 +221,7 @@ bool ChessPieces::Queen::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TI
 	return true;
 }
 
-bool ChessPieces::Queen::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
-	const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
-{
-	return false;
-<<<<<<< HEAD
-}
-=======
-}
-
-ChessPieces::Pawn::Pawn() :
-	Piece(PieceType::pawn)
-{
-}
-
-bool ChessPieces::Pawn::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
-{
-	// Move variables
-	const auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
-	const auto [rowToMoveTo, colToMoveTo] = Utils::positionStringToIndex(posToMoveTo);
-
-	const unsigned int colDistance = std::abs(static_cast<int>(colToMoveFrom - colToMoveTo));
-	const unsigned int rowDistance = std::abs(static_cast<int>(rowToMoveFrom - rowToMoveTo));
-
-	// get color of pawn
-	PieceColor pawnColor = Utils::getColorOfPieceByPosition(board, posToMoveFrom);
-
-	if ((pawnColor == PieceColor::white && rowToMoveFrom > rowToMoveTo) || //check if the user try to move back.
-		(pawnColor == PieceColor::black && rowToMoveFrom < rowToMoveTo))
-	{
-		return false;
-	}
-	else
-	{
-		//check if the Pawn is trying to eat other piece
-		if (colDistance == 1 && rowDistance == 1)
-		{
-			if ((pawnColor == Utils::getColorOfPieceByPosition(board, posToMoveTo)) || // check if the pawn can eat the piece.
-				(Utils::getColorOfPieceByPosition(board, posToMoveTo) == PieceColor::empty))
-			{
-				return false;
-			}
-		}
-		else // If trying to move..
-		{
-			if ((pawnColor == PieceColor::white && rowToMoveFrom == WHITE_START_ROW) ||  // If the pawn dosent move (start point)
-				(pawnColor == PieceColor::black && rowToMoveFrom == BLACK_START_ROW))	//    he can move 2 tiles.
-			{
-				if (colDistance != 0 || (rowDistance != 1 && rowDistance != 2))
-				{
-					return false;
-				}
-			}
-			else
-			{
-				if (colDistance != 0 || rowDistance != 1) // If the pawn try to move more then one tile or to the sides.
-				{
-					return false;
-				}
-			}
-		}
-	}
-
-	return true;
-}
-
-bool ChessPieces::Pawn::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
-	const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+bool ChessPieces::Queen::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom, const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
 {
 	return false;
 }
->>>>>>> pawn
