@@ -117,8 +117,5 @@ namespace ChessPieces
 			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
 			const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
 			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo);
-
-	private:
-		bool _hasMove;
 	};
 }

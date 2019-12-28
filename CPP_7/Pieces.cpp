@@ -239,8 +239,7 @@ bool ChessPieces::Queen::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE]
 }
 
 ChessPieces::Pawn::Pawn() :
-	Piece(PieceType::pawn),
-	_hasMove(false)
+	Piece(PieceType::pawn)
 {
 }
 
@@ -253,33 +252,31 @@ bool ChessPieces::Pawn::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TIL
 	const unsigned int colDistance = std::abs(static_cast<int>(colToMoveFrom - colToMoveTo));
 	const unsigned int rowDistance = std::abs(static_cast<int>(rowToMoveFrom - rowToMoveTo));
 
-	if (this->_hasMove == false) // If the pawn dosent move he move 2 tiles. 
+	// get color of pawn
+	PieceColor pawnColor = Utils::getColorOfPieceByPosition(board, posToMoveFrom);
+
+	//check if the Pawn is trying to eat other piece
+	if (colDistance == 1 && rowDistance == 1)
 	{
-		if (colDistance != 0 || (rowDistance != 1 && rowDistance != 2))
+		if ((pawnColor == Utils::getColorOfPieceByPosition(board, posToMoveTo)) || // check if the pawn can eat the piece.
+			(Utils::getColorOfPieceByPosition(board, posToMoveTo) == PieceColor::empty))
 		{
 			return false;
 		}
-		else if (colDistance == 1 && (rowDistance == 1 || rowDistance == 2)) // if the pawn is trying to eat
+	}
+	else // If trying to move..
+	{
+		if ((pawnColor == PieceColor::white && rowToMoveFrom == WHITE_START_ROW) ||  // If the pawn dosent move (start point)
+			(pawnColor == PieceColor::black && rowToMoveFrom == BLACK_START_ROW))	//    he can move 2 tiles.
 		{
-			if (Utils::getColorOfPieceByPosition(board, posToMoveFrom) == // check if the pawn can eat the piece.
-				Utils::getColorOfPieceByPosition(board, posToMoveTo))
+			if (colDistance != 0 || (rowDistance != 1 && rowDistance != 2))
 			{
 				return false;
 			}
 		}
-
-		this->_hasMove = true; // The pawn have done is first move.
-	}
-	else
-	{
-		if (colDistance != 0 || rowDistance != 1) // If the pawn try to move more then one tile or to the sides.
+		else
 		{
-			return false;
-		}
-		else if (colDistance == 1 && rowDistance == 1) // if the pawn is trying to eat
-		{
-			if (Utils::getColorOfPieceByPosition(board, posToMoveFrom) == // check if the pawn can eat the piece.
-				Utils::getColorOfPieceByPosition(board, posToMoveTo))
+			if (colDistance != 0 || rowDistance != 1) // If the pawn try to move more then one tile or to the sides.
 			{
 				return false;
 			}
