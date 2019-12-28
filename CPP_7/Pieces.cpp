@@ -225,5 +225,3 @@ bool ChessPieces::Queen::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE]
 {
 	return false;
 }
-
-
