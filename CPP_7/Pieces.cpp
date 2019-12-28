@@ -255,30 +255,38 @@ bool ChessPieces::Pawn::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TIL
 	// get color of pawn
 	PieceColor pawnColor = Utils::getColorOfPieceByPosition(board, posToMoveFrom);
 
-	//check if the Pawn is trying to eat other piece
-	if (colDistance == 1 && rowDistance == 1)
+	if ((pawnColor == PieceColor::white && rowToMoveFrom > rowToMoveTo) || //check if the user try to move back.
+		(pawnColor == PieceColor::black && rowToMoveFrom < rowToMoveTo))
 	{
-		if ((pawnColor == Utils::getColorOfPieceByPosition(board, posToMoveTo)) || // check if the pawn can eat the piece.
-			(Utils::getColorOfPieceByPosition(board, posToMoveTo) == PieceColor::empty))
-		{
-			return false;
-		}
+		return false;
 	}
-	else // If trying to move..
+	else
 	{
-		if ((pawnColor == PieceColor::white && rowToMoveFrom == WHITE_START_ROW) ||  // If the pawn dosent move (start point)
-			(pawnColor == PieceColor::black && rowToMoveFrom == BLACK_START_ROW))	//    he can move 2 tiles.
+		//check if the Pawn is trying to eat other piece
+		if (colDistance == 1 && rowDistance == 1)
 		{
-			if (colDistance != 0 || (rowDistance != 1 && rowDistance != 2))
+			if ((pawnColor == Utils::getColorOfPieceByPosition(board, posToMoveTo)) || // check if the pawn can eat the piece.
+				(Utils::getColorOfPieceByPosition(board, posToMoveTo) == PieceColor::empty))
 			{
 				return false;
 			}
 		}
-		else
+		else // If trying to move..
 		{
-			if (colDistance != 0 || rowDistance != 1) // If the pawn try to move more then one tile or to the sides.
+			if ((pawnColor == PieceColor::white && rowToMoveFrom == WHITE_START_ROW) ||  // If the pawn dosent move (start point)
+				(pawnColor == PieceColor::black && rowToMoveFrom == BLACK_START_ROW))	//    he can move 2 tiles.
 			{
-				return false;
+				if (colDistance != 0 || (rowDistance != 1 && rowDistance != 2))
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if (colDistance != 0 || rowDistance != 1) // If the pawn try to move more then one tile or to the sides.
+				{
+					return false;
+				}
 			}
 		}
 	}
