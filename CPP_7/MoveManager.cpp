@@ -266,6 +266,7 @@ bool MoveManager::didMakeCheckmate(
 	const bool& isWhite) const
 {
 	bool isCheckmate = true;
+
 	const PieceColor otherPlayerColor = (isWhite) ? PieceColor::black : PieceColor::white;
 
 	// saving a piece in case eating one when faking a move
@@ -297,12 +298,16 @@ bool MoveManager::didMakeCheckmate(
 					{
 						std::string positionToTest = Utils::positionIndexToString(std::make_tuple(k, l));
 						
-						if (isCapableMove(board, piecePosition, positionToTest))
+						// checking if not eating ourselfs
+						if (board.getColorOfPieceByPosition(positionToTest) != otherPlayerColor)
 						{
-							// checking if the king won't be in check after moving
-							if (didMakeCheck(board, piecePosition, positionToTest, currPlayerKingPos, isWhite) == false)
+							if (isCapableMove(board, piecePosition, positionToTest))
 							{
-								isCheckmate = false;
+								// checking if the king won't be in check after moving
+								if (didMakeCheck(board, piecePosition, positionToTest, currPlayerKingPos, isWhite) == false)
+								{
+									isCheckmate = false;
+								}
 							}
 						}
 					}

@@ -30,42 +30,33 @@ void connectToPipe(Pipe& p)
 void main()
 {
 	
+
+	Pipe p;
+	connectToPipe(p);
+
+	char msgToGraphics[1024];
+
+	strcpy_s(msgToGraphics, "rnbqkbnrpppppppp################################PPPPPPPPRNBQKBNR0"); // just example...
+	Game game;
+	p.sendMessageToGraphics(msgToGraphics);   // send the board string
+
+	// get message from graphics
+	std::string msgFromGraphics = p.getMessageFromGraphics();
+
+	while (msgFromGraphics != "quit")
 	{
-		Pipe p;
-		connectToPipe(p);
+		// should handle the string the sent from graphics
+		// according the protocol. Ex: e2e4           (move e2 to e4)
+	
+		strcpy_s(msgToGraphics, std::to_string(static_cast<unsigned int>(game.move(msgFromGraphics))).c_str()); // msgToGraphics should contain the result of the operation
 
-		char msgToGraphics[1024];
-
-		strcpy_s(msgToGraphics, "rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR0"); // just example...
-		Game game;
-		p.sendMessageToGraphics(msgToGraphics);   // send the board string
+		// return result to graphics		
+		p.sendMessageToGraphics(msgToGraphics);
 
 		// get message from graphics
-		std::string msgFromGraphics = p.getMessageFromGraphics();
-
-		while (msgFromGraphics != "quit")
-		{
-			// should handle the string the sent from graphics
-			// according the protocol. Ex: e2e4           (move e2 to e4)
-	
-			strcpy_s(msgToGraphics, std::to_string(static_cast<unsigned int>(game.move(msgFromGraphics))).c_str()); // msgToGraphics should contain the result of the operation
-
-			// return result to graphics		
-			p.sendMessageToGraphics(msgToGraphics);
-
-			// get message from graphics
-			msgFromGraphics = p.getMessageFromGraphics();
-		}
-
-		p.close();
+		msgFromGraphics = p.getMessageFromGraphics();
 	}
 
-	if (_CrtDumpMemoryLeaks())
-	{
-		std::cout << "Memory leaks!\n";
-	}
-	else
-	{
-		std::cout << "No leaks\n";
-	}
+	p.close();
+
 }

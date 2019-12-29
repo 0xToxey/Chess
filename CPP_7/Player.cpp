@@ -4,7 +4,7 @@ Player::Player(const bool& white) :
 	_playerTurn(white),
 	_white(white)
 {
-	this->_kingPosition = (this->_white) ? "d1" : "d8"; // starting points for white and black
+	this->_kingPosition = (this->_white) ? "e1" : "e8"; // starting points for white and black
 };
 
 void Player::setTurn(const bool& playerTurn)

@@ -5,7 +5,7 @@
 // C'TOR
 Game::Game() :
 	_players{ Player(true), Player(false) },
-	_board{ "RNBKQBNRPPPPPPPP################################pppppppprnbkqbnr" }
+	_board{ "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr" }
 {
 }
 
