@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ChessBoard.hpp" />
     <ClInclude Include="constants.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="MoveManager.hpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="Utils.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ChessBoard.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="MoveManager.cpp" />
     <ClCompile Include="Piece.cpp" />

@@ -11,15 +11,15 @@ namespace ChessPieces
 		Rook();
 
 		virtual bool isCapableOfMoving(
-			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], 
+			const ChessBoard& board, 
 			const std::string& posToMoveFrom,
-			const std::string& posToMoveTo);
+			const std::string& posToMoveTo) const;
 	
-	protected:
+	private:
 		virtual bool isMovingAcrossPieces(
-			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const ChessBoard& board,
 			const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo);
+			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo) const;
 
 	};
 
@@ -30,16 +30,16 @@ namespace ChessPieces
 		King();
 
 		virtual bool isCapableOfMoving(
-			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const ChessBoard& board,
 			const std::string& posToMoveFrom,
-			const std::string& posToMoveTo);
+			const std::string& posToMoveTo) const;
 
-	protected:
+	private:
 		// King always will be able to move without moving across other piece.
 		virtual bool isMovingAcrossPieces(
-			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const ChessBoard& board,
 			const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo);
+			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo) const;
 	};
 
 	class Knight : public Piece
@@ -49,16 +49,16 @@ namespace ChessPieces
 		Knight();
 
 		virtual bool isCapableOfMoving(
-			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const ChessBoard& board,
 			const std::string& posToMoveFrom,
-			const std::string& posToMoveTo);
+			const std::string& posToMoveTo) const;
 
-	protected:
+	private:
 		// kinght can jump acroos other picese 
 		virtual bool isMovingAcrossPieces(
-			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const ChessBoard& board,
 			const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo);
+			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo) const;
 	};
 
 	class Bishop : public Piece
@@ -68,16 +68,15 @@ namespace ChessPieces
 		Bishop();
 
 		virtual bool isCapableOfMoving(
-			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const ChessBoard& board,
 			const std::string& posToMoveFrom,
-			const std::string& posToMoveTo);
+			const std::string& posToMoveTo) const;
 
-	protected:
-
+	private:
 		virtual bool isMovingAcrossPieces(
-			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const ChessBoard& board,
 			const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo);
+			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo) const;
 	};
 
 	class Queen : public Piece
@@ -87,16 +86,20 @@ namespace ChessPieces
 		Queen();
 
 		virtual bool isCapableOfMoving(
-			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const ChessBoard& board,
 			const std::string& posToMoveFrom,
-			const std::string& posToMoveTo);
+			const std::string& posToMoveTo) const;
 
-	protected:
+	private:
+		// queen movment is part of bishop & rook momvent
+		ChessPieces::Bishop _bishop;
+		ChessPieces::Rook _rook;
+
 		// The queen use this function throw the bishop or rook piece.
 		virtual bool isMovingAcrossPieces(
-			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const ChessBoard& board,
 			const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo);
+			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo) const;
 
 	};
 
@@ -106,16 +109,16 @@ namespace ChessPieces
 		Pawn();
 
 		virtual bool isCapableOfMoving(
-			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const ChessBoard& board,
 			const std::string& posToMoveFrom,
-			const std::string& posToMoveTo);
+			const std::string& posToMoveTo) const;
 
-	protected:
+	private:
 
 		// The pawn can move only one tile each time. (cannot move accros pieces)
 		virtual bool isMovingAcrossPieces(
-			const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+			const ChessBoard& board,
 			const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo);
+			const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo) const;
 	};
 }

@@ -5,17 +5,14 @@
 // C'TOR
 Game::Game() :
 	_players{ Player(true), Player(false) },
-	_board{ NULL }
+	_board{ "RNBKQBNRPPPPPPPP################################pppppppprnbkqbnr" }
 {
-	//copying the game board into the board array.
-	const char* arrayBoard = "RNBKQBNRPPPPPPPP################################pppppppprnbkqbnr";
-	memcpy(this->_board, arrayBoard, TILES_PER_SIDE* TILES_PER_SIDE);
 }
 
 /*
 function calls function to check if move is capable, if is capable - doing the move
 input:
-	msgFromGraphics - message containing where player is , and where to move
+	msgFromGraphics - message containing where is the player and the dest tail to move
 output:
 	MoveErrorCode - a code according to the pptx
 */

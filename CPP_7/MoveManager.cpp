@@ -3,15 +3,16 @@
 #include "Utils.hpp"
 #include <tuple>
 
-MoveManager::MoveManager()
-{
-};
-
+/*
+function calls all necessary functions to check if a move is valid
+output:
+	move code
+*/
 MoveCode MoveManager::checkMove(
-	char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	ChessBoard& board,
 	Player(&players)[NUM_OF_PLAYERS],
 	const std::string& posToMoveFrom,
-	const std::string& posToMoveTo)
+	const std::string& posToMoveTo) const
 {
 	const unsigned int currPlayerTurn = Utils::WhoseTurnIsIt(players);
 	const bool isCurrPlayerWhite = players[currPlayerTurn].isWhite();
@@ -55,23 +56,28 @@ MoveCode MoveManager::checkMove(
 	return MoveCode::ValidMove;
 }
 
+/*
+function makes a move without changing the turn (fake move)
+		** help to check if the move make checkmate.
+*/
 void MoveManager::makeMove(
-	char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	ChessBoard& board,
 	const std::string& posToMoveFrom,
-	const std::string& posToMoveTo)
+	const std::string& posToMoveTo) const
 {
-	auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
-	auto [rowToMoveTo, colToMoveTo] = Utils::positionStringToIndex(posToMoveTo);
-
-	board[rowToMoveTo][colToMoveTo] = board[rowToMoveFrom][colToMoveFrom];
-	board[rowToMoveFrom][colToMoveFrom] = EMPTY_TILE;
+	board[posToMoveTo] = board[posToMoveFrom];
+	board[posToMoveFrom] = EMPTY_TILE;
 }
 
+/*
+function makes a move and changes the turn
+		** original move
+*/
 void MoveManager::makeMove(
 	Player(&players)[NUM_OF_PLAYERS],
-	char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	ChessBoard& board,
 	const std::string& posToMoveFrom,
-	const std::string& posToMoveTo)
+	const std::string& posToMoveTo) const
 {
 	makeMove(board, posToMoveFrom, posToMoveTo);
 
@@ -87,42 +93,53 @@ void MoveManager::makeMove(
 	}
 }
 
+/*
+function checks if player is trying to move other player pieces or empty piece
+*/
 bool MoveManager::isMovingOtherPlayerPieces(
-	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const ChessBoard& board,
 	const std::string& posToMoveFrom,
-	const bool& isWhite)
+	const bool& isWhite) const
 {
 	// checking if the player is trying to move pieces that aren't his
-	switch (Utils::getColorOfPieceByPosition(board, posToMoveFrom))
+	switch (board.getColorOfPieceByPosition(posToMoveFrom))
 	{
 	case PieceColor::white:
 		return ((isWhite) ? false : true);
+
 	case PieceColor::black:
 		return ((isWhite) ? true : false);
+
 	case PieceColor::empty:
 		return true;
 	}
 }
 
+/*
+function checks if player is trying to eat is own piece
+*/
 bool MoveManager::isEatingSelf(
-	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const ChessBoard& board,
 	const std::string& posToMoveFrom,
-	const std::string& posToMoveTo)
+	const std::string& posToMoveTo) const
 {
-	// checking if player is trying to take over his own pieces
-	if (Utils::getColorOfPieceByPosition(board, posToMoveFrom) == Utils::getColorOfPieceByPosition(board, posToMoveTo))
+	// checking if player is trying to take over his own piece
+	if (board.getColorOfPieceByPosition(posToMoveFrom) == board.getColorOfPieceByPosition(posToMoveTo))
 	{
 		return true;
 	}
 	return false;
 }
 
+/*
+function checks if the move is valid
+*/
 bool MoveManager::isCapableMove(
-	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const ChessBoard& board,
 	const std::string& posToMoveFrom,
-	const std::string& posToMoveTo)
+	const std::string& posToMoveTo) const
 {
-	const PieceType currentPieceType = Utils::getTypeOfPieceByPosition(board, posToMoveFrom);
+	const PieceType currentPieceType = board.getTypeOfPieceByPosition(posToMoveFrom);
 	bool capableOfMoving = true;
 
 	// checking if the pieces can actually move that way
@@ -156,7 +173,10 @@ bool MoveManager::isCapableMove(
 	return capableOfMoving;
 }
 
-bool MoveManager::isntMoving(const std::string& posToMoveFrom, const std::string& posToMoveTo)
+/*
+function checks if piece isnt moving
+*/
+bool MoveManager::isntMoving(const std::string& posToMoveFrom, const std::string& posToMoveTo) const
 {
 	// checking if player trying to not move
 	if (posToMoveFrom == posToMoveTo)
@@ -166,29 +186,34 @@ bool MoveManager::isntMoving(const std::string& posToMoveFrom, const std::string
 	return false;
 }
 
+/*
+function checks if player is doing a self check
+*/
 bool MoveManager::isSelfCheck(
-	char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	ChessBoard& board,
 	const std::string& posToMoveFrom,
 	const std::string& posToMoveTo,
 	std::string& currPlayerkingPos,
-	const bool& isWhite)
+	const bool& isWhite) const
 {
-	// checking if black player can check
+	// checking if other player can check
 	return didMakeCheck(board, posToMoveFrom, posToMoveTo, currPlayerkingPos, !isWhite);
 }
 
+/*
+function checks if made chess in a move
+*/
 bool MoveManager::didMakeCheck(
-	char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	ChessBoard& board,
 	const std::string& posToMoveFrom,
 	const std::string& posToMoveTo,
 	std::string otherPlayerKingPos, // not a reference cause maybe changing it
-	const bool& isWhite)
+	const bool& isWhite) const
 {
 
 	const PieceColor currentPlayerColor = (isWhite) ? PieceColor::white : PieceColor::black;
 	// saving a piece in case eating one when faking a move
-	auto [pieceToSaveRow, pieceToSaveCol] = Utils::positionStringToIndex(posToMoveTo);
-	const char pieceToSave = board[pieceToSaveRow][pieceToSaveCol];
+	const char pieceToSave = board[posToMoveTo];
 	bool isCheck = false;
 
 	// in case trying to protect the king by moving it
@@ -205,15 +230,15 @@ bool MoveManager::didMakeCheck(
 	{
 		for (unsigned int j = 0; j < TILES_PER_SIDE && !isCheck; j++)
 		{
-			if (board[i][j] == EMPTY_TILE)
+			std::string currPiecePosition = Utils::positionIndexToString(std::make_tuple(i, j));
+
+			if (board[currPiecePosition] == EMPTY_TILE)
 			{
 				continue; // move to next piece
 			}
 
-			std::string currPiecePosition = Utils::positionIndexToString(std::make_tuple(i, j));
-
 			// if any piece of current player will cause a check
-			if (Utils::getColorOfPieceByPosition(board, currPiecePosition) == currentPlayerColor)
+			if (board.getColorOfPieceByPosition(currPiecePosition) == currentPlayerColor)
 			{
 				if (isCapableMove(board, currPiecePosition, otherPlayerKingPos)) // checking if can eat the king
 				{
@@ -226,23 +251,26 @@ bool MoveManager::didMakeCheck(
 
 	// reverting the move
 	makeMove(board, posToMoveTo, posToMoveFrom);
-	Utils::insertPieceIntoBoard(board, pieceToSave, posToMoveTo);
+	board.insertPieceIntoBoard(pieceToSave, posToMoveTo);
 	return isCheck;
 }
 
+/*
+function checks if made player checkmate in a move
+*/
 bool MoveManager::didMakeCheckmate(
-	char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	ChessBoard& board,
 	const std::string& posToMoveFrom,
 	const std::string& posToMoveTo,
 	std::string& currPlayerKingPos,
-	const bool& isWhite)
+	const bool& isWhite) const
 {
 	bool isCheckmate = true;
 	const PieceColor otherPlayerColor = (isWhite) ? PieceColor::black : PieceColor::white;
 
 	// saving a piece in case eating one when faking a move
-	auto [pieceToSaveRow, pieceToSaveCol] = Utils::positionStringToIndex(posToMoveTo);
-	const char pieceToSave = board[pieceToSaveRow][pieceToSaveCol];
+	const char pieceToSave = board[posToMoveTo];
+
 	// faking a move
 	makeMove(board, posToMoveFrom, posToMoveTo);
 
@@ -251,16 +279,16 @@ bool MoveManager::didMakeCheckmate(
 	{
 		for (unsigned int j = 0; j < TILES_PER_SIDE && isCheckmate; j++)
 		{
+			std::string piecePosition = Utils::positionIndexToString(std::make_tuple(i, j));
+
 			// if isn't a piece
-			if (board[i][j] == EMPTY_TILE)
+			if (board[piecePosition] == EMPTY_TILE)
 			{
 				continue; // move to next piece
 			}
-
-			std::string piecePosition = Utils::positionIndexToString(std::make_tuple(i, j));
 			
 			// if any piece of current player may save the king
-			if (Utils::getColorOfPieceByPosition(board, piecePosition) == otherPlayerColor)
+			if (board.getColorOfPieceByPosition(piecePosition) == otherPlayerColor)
 			{
 				// going over every place in the board to check if can save the king
 				for (unsigned int k = 0; k < TILES_PER_SIDE && isCheckmate; k++)
@@ -284,7 +312,7 @@ bool MoveManager::didMakeCheckmate(
 	}
 	// reverting the move
 	makeMove(board, posToMoveTo, posToMoveFrom);
-	Utils::insertPieceIntoBoard(board, pieceToSave, posToMoveTo);
+	board.insertPieceIntoBoard(pieceToSave, posToMoveTo);
 	return isCheckmate;
 }
 

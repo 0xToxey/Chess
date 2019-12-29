@@ -45,6 +45,9 @@
     <ClInclude Include="MoveManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ChessBoard.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -69,6 +72,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MoveManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessBoard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

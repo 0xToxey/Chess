@@ -8,18 +8,19 @@ ChessPieces::Rook::Rook() :
 }
 
 bool ChessPieces::Rook::isCapableOfMoving(
-	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const ChessBoard& board,
 	const std::string& posToMoveFrom,
-	const std::string& posToMoveTo)
+	const std::string& posToMoveTo) const
 {
 	const auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
-	const auto [rowToMoveTo, colToMoveTo] = Utils::positionStringToIndex(posToMoveTo);
+	const auto [rowToMoveTo, colToMoveTo]     = Utils::positionStringToIndex(posToMoveTo);
 
 	// checking if player is trying to move into a different column or different row
 	if (rowToMoveFrom != rowToMoveTo && colToMoveFrom != colToMoveTo)
 	{
 		return false;
 	}
+
 	// checking if player is trying to move across other pieces
 	if (isMovingAcrossPieces(board, rowToMoveFrom, colToMoveFrom, rowToMoveTo, colToMoveTo))
 	{
@@ -30,9 +31,9 @@ bool ChessPieces::Rook::isCapableOfMoving(
 }
 
 bool ChessPieces::Rook::isMovingAcrossPieces(
-	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const ChessBoard& board,
 	const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo) const
 {
 	if (rowToMoveFrom == rowToMoveTo)
 	{
@@ -41,8 +42,8 @@ bool ChessPieces::Rook::isMovingAcrossPieces(
 		const unsigned int endingColumn = ((colToMoveFrom > colToMoveTo) ? colToMoveFrom : colToMoveTo);
 
 		for (unsigned int i = startingColumn; i < endingColumn; i++)
-		{
-			if (board[rowToMoveFrom][i] != EMPTY_TILE)  // if there is a piece in the way
+		{ 
+			if (board.getPieceByIndex(rowToMoveFrom, i) != EMPTY_TILE)  // if there is a piece in the way
 			{
 				return true;
 			}
@@ -56,7 +57,7 @@ bool ChessPieces::Rook::isMovingAcrossPieces(
 
 		for (unsigned int i = startingRow; i < endingRow; i++)
 		{
-			if (board[i][colToMoveFrom] != EMPTY_TILE) // if there is a piece in the way
+			if (board.getPieceByIndex(i, colToMoveFrom) != EMPTY_TILE) // if there is a piece in the way
 			{
 				return true;
 			}
@@ -72,9 +73,9 @@ ChessPieces::King::King() :
 }
 
 bool ChessPieces::King::isCapableOfMoving(
-	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const ChessBoard& board,
 	const std::string& posToMoveFrom,
-	const std::string& posToMoveTo)
+	const std::string& posToMoveTo) const
 {
 	// Move variables
 	const auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
@@ -94,9 +95,9 @@ bool ChessPieces::King::isCapableOfMoving(
 }
 
 bool ChessPieces::King::isMovingAcrossPieces(
-	const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+	const ChessBoard& board,
 	const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo) const
 {
 	return false; // will never move across pieces
 }
@@ -106,13 +107,14 @@ ChessPieces::Knight::Knight() :
 {
 }
 
-bool ChessPieces::Knight::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+bool ChessPieces::Knight::isCapableOfMoving(
+	const ChessBoard& board,
 	const std::string& posToMoveFrom,
-	const std::string& posToMoveTo)
+	const std::string& posToMoveTo) const
 {
 	// Move variables
 	const auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
-	const auto [rowToMoveTo, colToMoveTo] = Utils::positionStringToIndex(posToMoveTo);
+	const auto [rowToMoveTo, colToMoveTo]     = Utils::positionStringToIndex(posToMoveTo);
 
 	const unsigned int colDistance = std::abs(static_cast<int>(colToMoveFrom - colToMoveTo));
 	const unsigned int rowDistance = std::abs(static_cast<int>(rowToMoveFrom - rowToMoveTo));
@@ -126,11 +128,12 @@ bool ChessPieces::Knight::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][T
 	return true;
 }
 
-bool ChessPieces::Knight::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+bool ChessPieces::Knight::isMovingAcrossPieces(
+	const ChessBoard& board,
 	const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo) const
 {
-	return false;
+	return false; // knight is allowed to move across other pieces
 }
 
 ChessPieces::Bishop::Bishop() :
@@ -138,13 +141,14 @@ ChessPieces::Bishop::Bishop() :
 {
 }
 
-bool ChessPieces::Bishop::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+bool ChessPieces::Bishop::isCapableOfMoving(
+	const ChessBoard& board,
 	const std::string& posToMoveFrom,
-	const std::string& posToMoveTo)
+	const std::string& posToMoveTo) const
 {
 	// Move variables
 	const auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
-	const auto [rowToMoveTo, colToMoveTo] = Utils::positionStringToIndex(posToMoveTo);
+	const auto [rowToMoveTo, colToMoveTo]     = Utils::positionStringToIndex(posToMoveTo);
 
 	const unsigned int colDistance = std::abs(static_cast<int>(colToMoveFrom - colToMoveTo));
 	const unsigned int rowDistance = std::abs(static_cast<int>(rowToMoveFrom - rowToMoveTo));
@@ -164,45 +168,42 @@ bool ChessPieces::Bishop::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][T
 	return true;
 }
 
-bool ChessPieces::Bishop::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+bool ChessPieces::Bishop::isMovingAcrossPieces(
+	const ChessBoard& board,
 	const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo) const
 {
-	// The column distance and the row distance are equal in bishop movment.
-	const unsigned int distance = std::abs(static_cast<int>(colToMoveFrom - colToMoveTo));
+	// checking for lower and higher part of the move in the board
+	const unsigned int startingRow = ((rowToMoveFrom < rowToMoveTo) ? rowToMoveFrom : rowToMoveTo) + 1;
+	const unsigned int endingRow   = ((rowToMoveFrom > rowToMoveTo) ? rowToMoveFrom : rowToMoveTo);	
 
-	for (int i = 1; i < distance; i++)
+	// if moving up , starting from current col, if moving down starting from dest col
+	unsigned int startingCol = ((rowToMoveFrom > rowToMoveTo) ? colToMoveTo: colToMoveFrom);
+
+	// THE CHECK WORKS FROM DOWN TO UP
+	for (unsigned int i = startingRow, j = startingCol; i < endingRow; i++)
 	{
-		if ((rowToMoveFrom < rowToMoveTo) && (colToMoveFrom < colToMoveTo)) // The piece try to move up right.
+		if (rowToMoveFrom < rowToMoveTo)
 		{
-			if (board[rowToMoveFrom + i][colToMoveFrom + i] != EMPTY_TILE)
-			{
-				return true;
-			}
+			// if moving up
+			// when moving left  - moving a tile left(col left)
+			// when moving right - moving a tile right(col right)
+			(colToMoveFrom > colToMoveTo) ? j-- : j++;
 		}
-		else if ((rowToMoveFrom < rowToMoveTo) && (colToMoveFrom > colToMoveTo)) // The piece try to move up left.
+		else
 		{
-			if (board[rowToMoveFrom + i][colToMoveFrom - i] != EMPTY_TILE)
-			{
-				return true;
-			}
+			// if moving down
+			// when moving left  - moving a tile right(col right)
+			// when moving right - moving a tile left(col left)
+			(colToMoveFrom > colToMoveTo) ? j++ : j--;
 		}
-		else if ((rowToMoveFrom > rowToMoveTo) && (colToMoveFrom > colToMoveTo)) // The piece try to move down left.
+
+		if (board.getPieceByIndex(i,j) != EMPTY_TILE)  // if there is a piece in the way
 		{
-			if (board[rowToMoveFrom - i][colToMoveFrom - i] != EMPTY_TILE)
-			{
-				return true;
-			}
-		}
-		else if ((rowToMoveFrom < rowToMoveTo) && (colToMoveFrom < colToMoveTo)) // The piece try to move fown right.
-		{
-			if (board[rowToMoveFrom - i][colToMoveFrom + i] != EMPTY_TILE)
-			{
-				return true;
-			}
+			return true;
 		}
 	}
-
+	
 	return false;
 }
 
@@ -211,16 +212,13 @@ ChessPieces::Queen::Queen() :
 {
 }
 
-bool ChessPieces::Queen::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+bool ChessPieces::Queen::isCapableOfMoving(const ChessBoard& board,
 	const std::string& posToMoveFrom,
-	const std::string& posToMoveTo)
+	const std::string& posToMoveTo) const
 {
-	// queen movment is part of bishop & rook momvent
-	ChessPieces::Bishop _bishop;
-	ChessPieces::Rook _rook;
 
-	bool diagonalMove = _bishop.isCapableOfMoving(board, posToMoveFrom, posToMoveTo);
-	bool straightMove = _rook.isCapableOfMoving(board, posToMoveFrom, posToMoveTo);
+	bool diagonalMove = this->_bishop.isCapableOfMoving(board, posToMoveFrom, posToMoveTo);
+	bool straightMove = this->_rook.isCapableOfMoving(board, posToMoveFrom, posToMoveTo);
 
 	// if the diagonal move or the straight move is possible it means that the queen can move.
 	if (!(diagonalMove || straightMove))
@@ -231,9 +229,9 @@ bool ChessPieces::Queen::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TI
 	return true;
 }
 
-bool ChessPieces::Queen::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+bool ChessPieces::Queen::isMovingAcrossPieces(const ChessBoard& board,
 	const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo) const
 {
 	return false;
 }
@@ -243,60 +241,67 @@ ChessPieces::Pawn::Pawn() :
 {
 }
 
-bool ChessPieces::Pawn::isCapableOfMoving(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE], const std::string& posToMoveFrom, const std::string& posToMoveTo)
+bool ChessPieces::Pawn::isCapableOfMoving(
+	const ChessBoard& board,
+	const std::string& posToMoveFrom,
+	const std::string& posToMoveTo) const
 {
+	PieceColor pawnColor =board.getColorOfPieceByPosition(posToMoveFrom);
+
 	// Move variables
 	const auto [rowToMoveFrom, colToMoveFrom] = Utils::positionStringToIndex(posToMoveFrom);
-	const auto [rowToMoveTo, colToMoveTo] = Utils::positionStringToIndex(posToMoveTo);
+	const auto [rowToMoveTo, colToMoveTo]     = Utils::positionStringToIndex(posToMoveTo);
 
 	const unsigned int colDistance = std::abs(static_cast<int>(colToMoveFrom - colToMoveTo));
 	const unsigned int rowDistance = std::abs(static_cast<int>(rowToMoveFrom - rowToMoveTo));
 
-	// get color of pawn
-	PieceColor pawnColor = Utils::getColorOfPieceByPosition(board, posToMoveFrom);
 
-	if ((pawnColor == PieceColor::white && rowToMoveFrom > rowToMoveTo) || //check if the user try to move back.
-		(pawnColor == PieceColor::black && rowToMoveFrom < rowToMoveTo))
+	// checking if pawn is moving in the wrong way
+	if ((pawnColor == PieceColor::white && rowToMoveFrom > rowToMoveTo) || // white should moving forward
+		(pawnColor == PieceColor::black && rowToMoveFrom < rowToMoveTo))   // black should move backwards
 	{
 		return false;
 	}
-	else
+
+
+	// checking if pawn trying to eat, and if so should eat other player pieces
+	if (colDistance == 1 && rowDistance == 1)
 	{
-		//check if the Pawn is trying to eat other piece
-		if (colDistance == 1 && rowDistance == 1)
+		if ((board.getColorOfPieceByPosition(posToMoveTo) == PieceColor::empty))
 		{
-			if ((pawnColor == Utils::getColorOfPieceByPosition(board, posToMoveTo)) || // check if the pawn can eat the piece.
-				(Utils::getColorOfPieceByPosition(board, posToMoveTo) == PieceColor::empty))
+			return false;
+		}
+	}
+	else // if pawn is trying to move regularly
+	{
+		// if the pawn is in the starting point , it can move 2 tiles
+		if ((pawnColor == PieceColor::white && rowToMoveFrom == WHITE_START_ROW) ||
+			(pawnColor == PieceColor::black && rowToMoveFrom == BLACK_START_ROW))
+		{
+			if (colDistance != 0 || rowDistance > 2)
 			{
 				return false;
 			}
 		}
-		else // If trying to move..
+		// checking if the pawn is trying to move to the sides or more than 1 tile
+		else if (colDistance != 0 || rowDistance != 1)
 		{
-			if ((pawnColor == PieceColor::white && rowToMoveFrom == WHITE_START_ROW) ||  // If the pawn dosent move (start point)
-				(pawnColor == PieceColor::black && rowToMoveFrom == BLACK_START_ROW))	//    he can move 2 tiles.
-			{
-				if (colDistance != 0 || (rowDistance != 1 && rowDistance != 2))
-				{
-					return false;
-				}
-			}
-			else
-			{
-				if (colDistance != 0 || rowDistance != 1) // If the pawn try to move more then one tile or to the sides.
-				{
-					return false;
-				}
-			}
+			return false;
+		}
+		// if pawn is trying to eat in a straight line
+		if (board.getTypeOfPieceByPosition(posToMoveTo) != PieceType::empty)
+		{
+			return false;
 		}
 	}
-
+	
 	return true;
 }
 
-bool ChessPieces::Pawn::isMovingAcrossPieces(const char(&board)[TILES_PER_SIDE][TILES_PER_SIDE],
+bool ChessPieces::Pawn::isMovingAcrossPieces(
+	const ChessBoard& board,
 	const unsigned int& rowToMoveFrom, const unsigned int& colToMoveFrom,
-	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo)
+	const unsigned int& rowToMoveTo, const unsigned int& colToMoveTo) const
 {
 	return false;
 }
