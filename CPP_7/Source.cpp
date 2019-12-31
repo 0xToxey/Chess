@@ -58,6 +58,10 @@ void main()
 			if (Utils::WhoseTurnIsIt(game._players) != BOT_TURN)
 			{
 				msgFromGraphics = chessPipe.getMessageFromGraphics();
+				if (msgFromGraphics == "quit")
+				{
+					exit(0);
+				}
 				strcpy_s(msgToGraphics, std::to_string(static_cast<unsigned int>(game.move(msgFromGraphics))).c_str()); // msgToGraphics should contain the result of the operation
 				chessPipe.sendMessageToGraphics(msgToGraphics);
 			}
@@ -75,6 +79,10 @@ void main()
 		else
 		{
 			msgFromGraphics = chessPipe.getMessageFromGraphics();
+			if (msgFromGraphics == "quit")
+			{
+				exit(0);
+			}
 			strcpy_s(msgToGraphics, std::to_string(static_cast<unsigned int>(game.move(msgFromGraphics))).c_str()); // msgToGraphics should contain the result of the operation
 
 			// return result to graphics		
