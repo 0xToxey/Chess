@@ -25,23 +25,24 @@ void connectToPipe(Pipe& p)
 			return;
 		}
 	}
-
 }
+
 void main()
 {
-	
+	Pipe chessPipe(0);
+	connectToPipe(chessPipe);
 
-	Pipe p;
-	connectToPipe(p);
+	Pipe changePipe(1);
+	connectToPipe(changePipe);
 
 	char msgToGraphics[1024];
 
 	strcpy_s(msgToGraphics, "rnbqkbnrpppppppp################################PPPPPPPPRNBQKBNR0"); // just example...
 	Game game;
-	p.sendMessageToGraphics(msgToGraphics);   // send the board string
+	chessPipe.sendMessageToGraphics(msgToGraphics);   // send the board string
 
 	// get message from graphics
-	std::string msgFromGraphics = p.getMessageFromGraphics();
+	std::string msgFromGraphics = chessPipe.getMessageFromGraphics();
 
 	while (msgFromGraphics != "quit")
 	{
@@ -51,12 +52,12 @@ void main()
 		strcpy_s(msgToGraphics, std::to_string(static_cast<unsigned int>(game.move(msgFromGraphics))).c_str()); // msgToGraphics should contain the result of the operation
 
 		// return result to graphics		
-		p.sendMessageToGraphics(msgToGraphics);
+		chessPipe.sendMessageToGraphics(msgToGraphics);
 
 		// get message from graphics
-		msgFromGraphics = p.getMessageFromGraphics();
+		msgFromGraphics = chessPipe.getMessageFromGraphics();
 	}
 
-	p.close();
-
+	chessPipe.close();
+	changePipe.close();
 }
