@@ -9,8 +9,11 @@
 #define ASCII_NUMBER_CONVERT 48
 #define EMPTY_TILE '#'
 
-#define WHITE_START_ROW 1
-#define BLACK_START_ROW 6
+#define WHITE_PAWN_START_ROW 1
+#define BLACK_PAWN_START_ROW 6
+
+#define WHITE_START_ROW 0
+#define BLACK_START_ROW 7
 
 enum class MoveCode
 {

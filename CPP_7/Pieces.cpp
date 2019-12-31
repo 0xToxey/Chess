@@ -275,8 +275,8 @@ bool ChessPieces::Pawn::isCapableOfMoving(
 	else // if pawn is trying to move regularly
 	{
 		// if the pawn is in the starting point , it can move 2 tiles
-		if ((pawnColor == PieceColor::white && rowToMoveFrom == WHITE_START_ROW) ||
-			(pawnColor == PieceColor::black && rowToMoveFrom == BLACK_START_ROW))
+		if ((pawnColor == PieceColor::white && rowToMoveFrom == WHITE_PAWN_START_ROW) ||
+			(pawnColor == PieceColor::black && rowToMoveFrom == BLACK_PAWN_START_ROW))
 		{
 			if (colDistance != 0 || rowDistance > 2)
 			{

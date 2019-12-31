@@ -3,9 +3,11 @@
 #include "Utils.hpp"
 
 // C'TOR
-Game::Game() :
+Game::Game(Pipe mainPipe, Pipe changePipe) :
 	_players{ Player(true), Player(false) },
-	_board{ "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr" }
+	_board{ "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr" },
+	_mainPipe(mainPipe),
+	_changePipe(changePipe)
 {
 }
 

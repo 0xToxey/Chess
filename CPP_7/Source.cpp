@@ -38,7 +38,7 @@ void main()
 	char msgToGraphics[1024];
 
 	strcpy_s(msgToGraphics, "rnbqkbnrpppppppp################################PPPPPPPPRNBQKBNR0"); // just example...
-	Game game;
+	Game game(chessPipe, changePipe);
 	chessPipe.sendMessageToGraphics(msgToGraphics);   // send the board string
 
 	// get message from graphics
