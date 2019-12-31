@@ -7,16 +7,19 @@ class Game
 {
 	public:
 		// C'TOR
-		Game(Pipe mainPipe, Pipe changePipe);
+		Game(const Pipe& mainPipe, const Pipe& changePipe, const bool& isBotPlaying);
 
 		// function that calls function to check if move capable and makes a move
 		MoveCode move(const std::string& msgFromGraphics);
-
+		bool isBotPlaying() const;
+		std::string getMoveFromBot() const;
+		
+		Player _players[NUM_OF_PLAYERS];
 	private:
+		std::string getBoardForBot() const;
 		Pipe _mainPipe;
 		Pipe _changePipe; // can change the board.
-
 		MoveManager _moveManager;
-		Player _players[NUM_OF_PLAYERS];
 		ChessBoard _board;
+		bool _isBotPlaying;
 };

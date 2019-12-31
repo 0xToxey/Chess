@@ -15,6 +15,8 @@
 #define WHITE_START_ROW 0
 #define BLACK_START_ROW 7
 
+#define BOT_TURN 1
+
 enum class MoveCode
 {
 	ValidMove = 0,

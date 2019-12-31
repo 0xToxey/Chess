@@ -27,35 +27,59 @@ void connectToPipe(Pipe& p)
 	}
 }
 
+bool showDialogBot()
+{
+	int ans = MessageBox(NULL, "Play against the computer?", "Playing Method", MB_YESNO);
+	return(ans == IDYES ? true : false);
+}
+
 void main()
 {
-	Pipe chessPipe(0);
-	connectToPipe(chessPipe);
+	bool isBotPlaying = showDialogBot();
 
+	Pipe chessPipe(0);
 	Pipe changePipe(1);
+
+	connectToPipe(chessPipe);
 	connectToPipe(changePipe);
 
 	char msgToGraphics[1024];
 
 	strcpy_s(msgToGraphics, "rnbqkbnrpppppppp################################PPPPPPPPRNBQKBNR0"); // just example...
-	Game game(chessPipe, changePipe);
+	Game game(chessPipe, changePipe, isBotPlaying);
 	chessPipe.sendMessageToGraphics(msgToGraphics);   // send the board string
 
-	// get message from graphics
-	std::string msgFromGraphics = chessPipe.getMessageFromGraphics();
+	std::string msgFromGraphics = "";
 
 	while (msgFromGraphics != "quit")
 	{
-		// should handle the string the sent from graphics
-		// according the protocol. Ex: e2e4           (move e2 to e4)
-	
-		strcpy_s(msgToGraphics, std::to_string(static_cast<unsigned int>(game.move(msgFromGraphics))).c_str()); // msgToGraphics should contain the result of the operation
+		if (game.isBotPlaying()) // if bot is playing need to get one turn form api, one from player
+		{
+			if (Utils::WhoseTurnIsIt(game._players) != BOT_TURN)
+			{
+				msgFromGraphics = chessPipe.getMessageFromGraphics();
+				strcpy_s(msgToGraphics, std::to_string(static_cast<unsigned int>(game.move(msgFromGraphics))).c_str()); // msgToGraphics should contain the result of the operation
+				chessPipe.sendMessageToGraphics(msgToGraphics);
+			}
+			else
+			{
+				msgFromGraphics = game.getMoveFromBot();
+				MoveCode moveCode = game.move(msgFromGraphics);
 
-		// return result to graphics		
-		chessPipe.sendMessageToGraphics(msgToGraphics);
+				if (moveCode == MoveCode::CheckMate) // if bot lost or won
+				{
+					exit(0);
+				}
+			}
+		}
+		else
+		{
+			msgFromGraphics = chessPipe.getMessageFromGraphics();
+			strcpy_s(msgToGraphics, std::to_string(static_cast<unsigned int>(game.move(msgFromGraphics))).c_str()); // msgToGraphics should contain the result of the operation
 
-		// get message from graphics
-		msgFromGraphics = chessPipe.getMessageFromGraphics();
+			// return result to graphics		
+			chessPipe.sendMessageToGraphics(msgToGraphics);
+		}
 	}
 
 	chessPipe.close();
