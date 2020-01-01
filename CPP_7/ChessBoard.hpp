@@ -11,9 +11,6 @@ public:
 	char& operator[] (const std::string& position);
 	char operator[] (const std::string& position) const;
 
-	// inserting a piece into a board array
-	void insertPieceIntoBoard(const char& piece, const std::string& position);
-
 	// getting type/color/piece of a piece by position/index
 	PieceColor getColorOfPieceByPosition(const std::string& position) const;
 	PieceType getTypeOfPieceByPosition(const std::string& position) const;

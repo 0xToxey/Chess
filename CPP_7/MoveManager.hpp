@@ -27,6 +27,11 @@ public:
 		const std::string& posToMoveFrom,
 		const std::string& posToMoveTo) const;
 
+	bool isCheckOrMate(
+		ChessBoard& board,
+		const std::string& posToMoveFrom,
+		const std::string& posToMoveTo);
+
 
 private:
 

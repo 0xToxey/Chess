@@ -25,15 +25,6 @@ char ChessBoard::operator[](const std::string& position) const
 	return this->_board[row][col]; // by value
 }
 
-/*
-function inserts a piece into a board array
-*/
-void ChessBoard::insertPieceIntoBoard(const char& piece, const std::string& position)
-{
-	const auto [row, col] = Utils::positionStringToIndex(position);
-	this->_board[row][col] = piece;
-}
-
 char ChessBoard::getPieceByIndex(const unsigned int& row, const unsigned int& col) const
 {
 	return this->_board[row][col];

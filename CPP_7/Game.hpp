@@ -16,6 +16,8 @@ class Game
 		
 		Player _players[NUM_OF_PLAYERS];
 	private:
+		void tryToPromote(const std::string& posToMoveTo);
+
 		std::string getBoardForBot() const;
 		Pipe _mainPipe;
 		Pipe _changePipe; // can change the board.

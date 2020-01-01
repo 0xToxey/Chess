@@ -18,6 +18,7 @@ MoveCode MoveManager::checkMove(
 	const bool isCurrPlayerWhite = players[currPlayerTurn].isWhite();
 	std::string otherPlayerKingPos = players[(currPlayerTurn == 1) ? 0 : 1].getKingPosition();
 	std::string currPlayerKingPos = players[currPlayerTurn].getKingPosition();
+	MoveCode moveCode = MoveCode::ValidMove;
 
 	// checking if the move is valid
 	if (isMovingOtherPlayerPieces(board, posToMoveFrom, isCurrPlayerWhite))
@@ -44,16 +45,15 @@ MoveCode MoveManager::checkMove(
 	// in case the move is valid checking for check
 	if (didMakeCheck(board, posToMoveFrom, posToMoveTo, otherPlayerKingPos, isCurrPlayerWhite))
 	{
+		moveCode = MoveCode::MadeCheck;
+
 		if (didMakeCheckmate(board, posToMoveFrom, posToMoveTo, otherPlayerKingPos, isCurrPlayerWhite))
 		{
-			return MoveCode::CheckMate;
-		}
-		else
-		{
-			return MoveCode::MadeCheck;
+			moveCode = MoveCode::CheckMate;
 		}
 	}
-	return MoveCode::ValidMove;
+
+	return moveCode;
 }
 
 /*
@@ -65,6 +65,23 @@ void MoveManager::makeMove(
 	const std::string& posToMoveFrom,
 	const std::string& posToMoveTo) const
 {
+	const int rowToMoveFrom = posToMoveFrom[1] - '0' - 1; // converting from "1" to 0, "2" to 1
+	const int rowToMoveTo =	  posToMoveTo[1]   - '0' - 1; // converting from "1" to 0, "2" to 1
+
+	if (board.getTypeOfPieceByPosition(posToMoveFrom) == PieceType::pawn && // checking for promotion
+		(rowToMoveTo == WHITE_START_ROW || rowToMoveTo == BLACK_START_ROW))
+	{
+		switch (rowToMoveTo)
+		{
+		case WHITE_START_ROW:
+			board[posToMoveFrom] = 'q';
+			break;
+		case BLACK_START_ROW:
+			board[posToMoveFrom] = 'Q';
+			break;
+		}
+	}
+
 	board[posToMoveTo] = board[posToMoveFrom];
 	board[posToMoveFrom] = EMPTY_TILE;
 }
@@ -79,7 +96,8 @@ void MoveManager::makeMove(
 	const std::string& posToMoveFrom,
 	const std::string& posToMoveTo) const
 {
-	makeMove(board, posToMoveFrom, posToMoveTo);
+	board[posToMoveTo] = board[posToMoveFrom];
+	board[posToMoveFrom] = EMPTY_TILE;
 
 	// changing the players turn
 	const unsigned int currPlayerTurn = Utils::WhoseTurnIsIt(players);
@@ -213,7 +231,8 @@ bool MoveManager::didMakeCheck(
 
 	const PieceColor currentPlayerColor = (isWhite) ? PieceColor::white : PieceColor::black;
 	// saving a piece in case eating one when faking a move
-	const char pieceToSave = board[posToMoveTo];
+	const char pieceInCurrPos = board[posToMoveFrom];
+	const char pieceInFuturePos = board[posToMoveTo];
 	bool isCheck = false;
 
 	// in case trying to protect the king by moving it
@@ -249,9 +268,9 @@ bool MoveManager::didMakeCheck(
 		}
 	}
 
-	// reverting the move
-	makeMove(board, posToMoveTo, posToMoveFrom);
-	board.insertPieceIntoBoard(pieceToSave, posToMoveTo);
+	// reverting every move that we have changed(in the fake moves)
+	board[posToMoveFrom] = pieceInCurrPos;
+	board[posToMoveTo] = pieceInFuturePos;
 	return isCheck;
 }
 
@@ -270,7 +289,8 @@ bool MoveManager::didMakeCheckmate(
 	const PieceColor otherPlayerColor = (isWhite) ? PieceColor::black : PieceColor::white;
 
 	// saving a piece in case eating one when faking a move
-	const char pieceToSave = board[posToMoveTo];
+	const char pieceInCurrPos = board[posToMoveFrom];
+	const char pieceInFuturePos = board[posToMoveTo];
 
 	// faking a move
 	makeMove(board, posToMoveFrom, posToMoveTo);
@@ -315,9 +335,9 @@ bool MoveManager::didMakeCheckmate(
 			}
 		}
 	}
-	// reverting the move
-	makeMove(board, posToMoveTo, posToMoveFrom);
-	board.insertPieceIntoBoard(pieceToSave, posToMoveTo);
+	// reverting every move that we have changed(in the fake moves)
+	board[posToMoveFrom] = pieceInCurrPos;
+	board[posToMoveTo] = pieceInFuturePos;
 	return isCheckmate;
 }
 

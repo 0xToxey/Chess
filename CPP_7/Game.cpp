@@ -35,6 +35,8 @@ MoveCode Game::move(const std::string& msgFromPlayer)
 			moveCode = MoveCode::CheckMate;
 		}
 		this->_changePipe.sendMessageToGraphics(("Botmove " + msgFromPlayer).c_str());
+		this->tryToPromote(posToMoveTo);
+
 	}
 	else
 	{
@@ -49,6 +51,7 @@ MoveCode Game::move(const std::string& msgFromPlayer)
 	}
 
 	this->_moveManager.makeMove(this->_players, this->_board, posToMoveFrom, posToMoveTo);
+	this->tryToPromote(posToMoveTo);
 
 	return moveCode;
 }
@@ -56,6 +59,35 @@ MoveCode Game::move(const std::string& msgFromPlayer)
 bool Game::isBotPlaying() const
 {
 	return this->_isBotPlaying;
+}
+
+
+/*
+function tries to promote a pawn if he's in the starting opposite starting position
+*/
+void Game::tryToPromote(const std::string& posToMoveTo)
+{
+	// checking if trying to move a pawn and do a promotion
+	if (this->_board.getTypeOfPieceByPosition(posToMoveTo) == PieceType::pawn)
+	{
+		const int rowToMoveTo = posToMoveTo[1] - '0' - 1; // converting from "1" to 0, "2" to 1
+		if (rowToMoveTo == WHITE_START_ROW ||
+			rowToMoveTo == BLACK_START_ROW)
+		{
+			this->_changePipe.sendMessageToGraphics(("Promote " + posToMoveTo).c_str());
+
+			switch (rowToMoveTo)
+			{
+				case WHITE_START_ROW:
+					this->_board[posToMoveTo] = 'q';
+					break;
+				case BLACK_START_ROW:
+					this->_board[posToMoveTo] = 'Q';
+					break;
+			}
+		}
+	}
+	
 }
 
 /*
@@ -66,6 +98,7 @@ std::string Game::getMoveFromBot() const
 	std::string request = "http://www.chessdb.cn/cdb.php?action=queryall&board=";
 	const std::string board = this->getBoardForBot();
 	request += board + "%20b&showall=1";
+	std::cout << request << std::endl;
 	auto r = cpr::Get(cpr::Url{ request });
 
 	// if bot lost or won
