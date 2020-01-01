@@ -22,7 +22,7 @@ Homeworks for lesson 7 by Gabriel Bialyk & Mevaser Rotner
 
 ## Status
 
-- Finished V1, only Checkmate
+- Finished V2, changed GUI(sounds, effects), added Promotion, added Bot, added checkmate
 
 ## What's included
 
