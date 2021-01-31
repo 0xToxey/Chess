@@ -38,4 +38,5 @@ Homeworks for lesson 7 by Gabriel Bialyk & Mevaser Rotner
 
 **G.B**
 
+- <https://github.com/ToxEy69>
 - <https://gitlab.com/Toxey>
